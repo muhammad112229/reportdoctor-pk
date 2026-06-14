@@ -1,0 +1,21 @@
+{
+  "name": "ReportDoctor.pk",
+  "short_name": "ReportDoctor",
+  "description": "Upload Excel and CSV files to get data quality checks, business insights, charts, and PDF report options.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f8fbfc",
+  "theme_color": "#0f766e",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

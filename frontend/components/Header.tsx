@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BarChart3, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 import { site } from "@/lib/site";
 
 const nav = [
@@ -15,7 +15,7 @@ export function Header() {
     <header className="site-header">
       <Link href="/" className="brand" aria-label={`${site.name} home`}>
         <span className="brand-mark">
-          <BarChart3 size={21} aria-hidden="true" />
+          <img src="/logo-mark.svg" alt="" aria-hidden="true" />
         </span>
         <span>{site.name}</span>
       </Link>
