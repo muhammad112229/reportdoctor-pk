@@ -41,7 +41,7 @@ export const toolPages: ToolPage[] = [
       "CSV, XLSX, and XLS upload",
       "Automatic numeric, category, date, and text detection",
       "Free scan with limited summary and two charts",
-      "Paid full PDF report workflow for manual JazzCash, Easypaisa, or bank transfer"
+      "Paid full PDF report workflow for manual Easypaisa and WhatsApp screenshot verification"
     ],
     faq: [
       {
@@ -316,11 +316,18 @@ export const pricingTiers = [
   }
 ];
 
+function cleanPublicValue(value: string | undefined, placeholders: string[] = []) {
+  const trimmed = value?.trim() || "";
+  return placeholders.includes(trimmed) ? "" : trimmed;
+}
+
 export const paymentOptions = {
-  jazzcash: process.env.NEXT_PUBLIC_JAZZCASH_NUMBER || "03XX-XXXXXXX",
-  easypaisa: process.env.NEXT_PUBLIC_EASYPAISA_NUMBER || "03XX-XXXXXXX",
-  bank: process.env.NEXT_PUBLIC_BANK_DETAILS || "Bank name / account title / IBAN",
-  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "923000000000"
+  jazzcash: cleanPublicValue(process.env.NEXT_PUBLIC_JAZZCASH_NUMBER, ["03XX-XXXXXXX"]),
+  easypaisa: cleanPublicValue(process.env.NEXT_PUBLIC_EASYPAISA_NUMBER, ["03XX-XXXXXXX"]) || "03100906678",
+  bank:
+    cleanPublicValue(process.env.NEXT_PUBLIC_BANK_DETAILS, ["Bank name / account title / IBAN"]) ||
+    "Available on WhatsApp",
+  whatsapp: cleanPublicValue(process.env.NEXT_PUBLIC_WHATSAPP_NUMBER, ["923000000000"]) || "923100906678"
 };
 
 export const blogPosts = [

@@ -2,8 +2,9 @@
 
 import dynamic from "next/dynamic";
 import { FormEvent, useMemo, useState } from "react";
-import { Download, FileSpreadsheet, FileUp, Loader2, RefreshCcw } from "lucide-react";
+import { Download, FileSpreadsheet, FileUp, Loader2, MessageCircle, RefreshCcw } from "lucide-react";
 import { PaymentBox } from "@/components/PaymentBox";
+import { paymentOptions } from "@/lib/site";
 
 const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
 
@@ -83,6 +84,7 @@ export function AnalyzerClient() {
   const [pdfLoading, setPdfLoading] = useState(false);
 
   const canDownloadPdf = useMemo(() => Boolean(file && unlockCode.trim()), [file, unlockCode]);
+  const whatsappUrl = `https://wa.me/${paymentOptions.whatsapp}`;
 
   async function runAnalysis(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -434,6 +436,9 @@ export function AnalyzerClient() {
               <div className="result-panel">
                 <p className="eyebrow">Locked in free scan</p>
                 <h2>Full report includes</h2>
+                <p className="section-intro">
+                  Full PDF report chahiye? Easypaisa payment karein aur WhatsApp par screenshot bhejein.
+                </p>
                 <ul className="insight-list">
                   {result.locked_features.map((item) => (
                     <li key={item}>{item}</li>
@@ -442,6 +447,10 @@ export function AnalyzerClient() {
                 <div className="hero-actions">
                   <a className="button primary" href="#payment-options">
                     Request Full Report
+                  </a>
+                  <a className="button secondary" href={whatsappUrl} target="_blank" rel="noreferrer">
+                    <MessageCircle size={18} aria-hidden="true" />
+                    Send Payment Screenshot
                   </a>
                 </div>
               </div>

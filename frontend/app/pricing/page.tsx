@@ -17,8 +17,8 @@ export default function PricingPage() {
           <p className="eyebrow">Pricing</p>
           <h1>Start free, unlock full PDF reports manually</h1>
           <p>
-            The MVP uses JazzCash, Easypaisa, or bank transfer placeholders. Update payment details in environment
-            variables and README instructions when going live.
+            The MVP uses Easypaisa payment and WhatsApp screenshot verification. Bank transfer details can be shared on
+            WhatsApp when needed.
           </p>
         </div>
       </section>

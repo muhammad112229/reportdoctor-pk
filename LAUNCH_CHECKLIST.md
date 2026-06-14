@@ -6,6 +6,8 @@
 - [ ] Optional `www.reportdoctor.pk` redirect configured
 - [ ] Backend domain connected: `api.reportdoctor.pk`
 - [ ] HTTPS enabled for frontend and backend
+- [ ] Live frontend verified: `https://reportdoctor-pk.vercel.app`
+- [ ] Live backend verified: `https://reportdoctor-api.vercel.app`
 - [ ] Frontend production env set
 - [ ] Backend production env set
 
@@ -55,9 +57,8 @@
 - [ ] Privacy policy reviewed
 - [ ] Terms and disclaimer reviewed
 - [ ] Footer disclaimer visible
-- [ ] JazzCash details verified
-- [ ] Easypaisa details verified
-- [ ] Bank transfer details verified
+- [ ] Easypaisa number verified
+- [ ] WhatsApp screenshot verification flow tested
+- [ ] Bank transfer details confirmed as unavailable or shared manually on WhatsApp
 - [ ] WhatsApp contact link verified
 - [ ] Manual payment workflow documented for admin
-

@@ -29,8 +29,8 @@ export default function TermsDisclaimerPage() {
         </p>
         <h2>Manual payment MVP</h2>
         <p>
-          The MVP includes placeholders for JazzCash, Easypaisa, and bank transfer. Payment confirmation, unlock codes, and
-          refunds should be handled manually until a formal payment gateway is integrated.
+          The MVP uses manual Easypaisa payment and WhatsApp screenshot verification. Payment confirmation, unlock codes,
+          bank transfer requests, and refunds should be handled manually until a formal payment gateway is integrated.
         </p>
         <h2>No professional advice</h2>
         <p>
@@ -46,4 +46,3 @@ export default function TermsDisclaimerPage() {
     </>
   );
 }
-

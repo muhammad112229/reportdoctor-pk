@@ -6,6 +6,13 @@ Tagline: **Excel/CSV file upload karein, professional report hasil karein.**
 
 It includes a Next.js SEO website, a FastAPI analysis backend, CSV/XLS/XLSX upload, data quality checks, charts, English and Roman Urdu insights, and PDF report generation with a manual paid-unlock workflow.
 
+## Live Deployment
+
+- Frontend: `https://reportdoctor-pk.vercel.app`
+- Backend API: `https://reportdoctor-api.vercel.app`
+- Backend health check: `https://reportdoctor-api.vercel.app/health`
+- Backend API docs: `https://reportdoctor-api.vercel.app/docs`
+
 ## Project Structure
 
 ```text
@@ -29,12 +36,12 @@ Important frontend values:
 
 ```text
 NEXT_PUBLIC_API_URL=http://127.0.0.1:8000
-NEXT_PUBLIC_SITE_URL=https://reportdoctor.pk
+NEXT_PUBLIC_SITE_URL=https://reportdoctor-pk.vercel.app
 NEXT_PUBLIC_CONTACT_EMAIL=hello@reportdoctor.pk
-NEXT_PUBLIC_JAZZCASH_NUMBER=03XX-XXXXXXX
-NEXT_PUBLIC_EASYPAISA_NUMBER=03XX-XXXXXXX
-NEXT_PUBLIC_BANK_DETAILS=Bank name / account title / IBAN
-NEXT_PUBLIC_WHATSAPP_NUMBER=923000000000
+NEXT_PUBLIC_JAZZCASH_NUMBER=
+NEXT_PUBLIC_EASYPAISA_NUMBER=03100906678
+NEXT_PUBLIC_BANK_DETAILS=Available on WhatsApp
+NEXT_PUBLIC_WHATSAPP_NUMBER=923100906678
 ```
 
 Important backend values:
@@ -46,7 +53,7 @@ MAX_COLUMNS=200
 REQUEST_TIMEOUT_SECONDS=60
 RATE_LIMIT_REQUESTS=60
 RATE_LIMIT_WINDOW_SECONDS=60
-PAID_UNLOCK_CODE=demo123
+PAID_UNLOCK_CODE=replace-with-private-code
 ```
 
 Do not commit real secret values. `.gitignore` excludes local env files.
@@ -125,7 +132,7 @@ For serious public traffic, add proxy-level rate limiting, request body limits, 
 
 Pricing is editable in `frontend/lib/site.ts` under `pricingTiers`.
 
-Manual payment placeholders are configured through:
+Manual payment contact details are configured through:
 
 ```text
 NEXT_PUBLIC_JAZZCASH_NUMBER
@@ -139,9 +146,10 @@ The MVP flow is manual:
 
 1. User runs a free scan.
 2. User requests full report.
-3. User pays through JazzCash, Easypaisa, or bank transfer.
-4. Admin verifies payment and gives an unlock code.
-5. User enters unlock code and downloads the PDF.
+3. User pays through Easypaisa.
+4. User sends the payment screenshot on WhatsApp.
+5. Admin verifies payment and gives a private unlock code.
+6. User enters unlock code and downloads the PDF.
 
 ## Troubleshooting
 
@@ -150,4 +158,3 @@ The MVP flow is manual:
 - **PDF download says unlock required:** confirm `PAID_UNLOCK_CODE` matches the code entered in the UI.
 - **Upload rejected:** confirm file extension, file size under `MAX_UPLOAD_MB`, and that the file is not corrupted or password-protected.
 - **CORS error in browser:** add the exact frontend origin, including protocol and port, to `FRONTEND_ORIGINS`.
-

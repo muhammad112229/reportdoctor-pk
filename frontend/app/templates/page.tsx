@@ -42,8 +42,8 @@ export default function TemplatesPage() {
           <p className="eyebrow">Custom templates</p>
           <h2>Need a paid template or setup help?</h2>
           <p className="section-intro">
-            Keep payment manual for the MVP: collect requirements, share JazzCash/Easypaisa/bank details, and deliver the
-            customized CSV or Excel template after confirmation.
+            Keep payment manual for the MVP: collect requirements, share Easypaisa payment details, verify the screenshot
+            on WhatsApp, and deliver the customized CSV or Excel template after confirmation.
           </p>
         </div>
         <div className="result-panel payment-box">
