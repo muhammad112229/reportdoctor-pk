@@ -17,3 +17,4 @@ frontend/.env.production
 coverage/
 frontend/.env.local
 backend/uploads/
+.vercel/
