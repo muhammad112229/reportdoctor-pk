@@ -6,7 +6,7 @@ import { pricingTiers } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Pricing",
   description:
-    "ReportDoctor.pk MVP pricing with free scans, single full reports, and monthly business report options through manual payment."
+    "ReportDoctor.pk pricing for free scans, Basic PDF Reports, Business Reports, and Pro Reports with Easypaisa payment and WhatsApp unlock code verification."
 };
 
 export default function PricingPage() {
@@ -17,9 +17,15 @@ export default function PricingPage() {
           <p className="eyebrow">Pricing</p>
           <h1>Start free, unlock full PDF reports manually</h1>
           <p>
-            The MVP uses Easypaisa payment and WhatsApp screenshot verification. Bank transfer details can be shared on
-            WhatsApp when needed.
+            Run the free scan first. If the preview is useful, payment is handled through Easypaisa and the unlock code is
+            sent after WhatsApp screenshot verification.
           </p>
+        </div>
+      </section>
+      <section className="section">
+        <div className="status-box">
+          Payment note: Easypaisa payment ke baad screenshot WhatsApp par bhejein. Verification ke baad full report unlock
+          code diya jayega.
         </div>
       </section>
       <section className="section">
@@ -38,7 +44,7 @@ export default function PricingPage() {
                 ))}
               </div>
               <div className="card-footer">
-                <Link className="button primary" href={tier.name === "Free Scan" ? "/free-scan" : "/contact"}>
+                <Link className="button primary" href="/free-scan">
                   {tier.action}
                   <ArrowRight size={18} aria-hidden="true" />
                 </Link>

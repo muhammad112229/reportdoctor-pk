@@ -31,6 +31,15 @@
 - [ ] Free Scan title and description reviewed
 - [ ] OG placeholder replaced with final branded image
 
+## Google Search Console Setup
+
+- [ ] Add the live Vercel URL or final domain as a Search Console property
+- [ ] Verify ownership using the recommended DNS or HTML tag method
+- [ ] Submit `https://reportdoctor-pk.vercel.app/sitemap.xml`
+- [ ] Request indexing for the homepage
+- [ ] Request indexing for `/free-scan`, `/pricing`, and public tool pages
+- [ ] Check Coverage/Pages report after Google crawls the sitemap
+
 ## Analytics and Monitoring
 
 - [ ] Analytics provider selected or intentionally skipped

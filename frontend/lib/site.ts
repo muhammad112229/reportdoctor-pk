@@ -301,17 +301,24 @@ export const pricingTiers = [
     action: "Start Free Scan"
   },
   {
-    name: "Single Full Report",
-    price: "Rs. 1,500",
-    description: "Manual payment MVP option for one full PDF report.",
-    features: ["Full charts", "Business mode analysis", "English and Roman Urdu insights", "PDF report", "Recommendations"],
+    name: "Basic PDF Report",
+    price: "Rs. 300",
+    description: "A clean PDF report for simple files and quick sharing.",
+    features: ["Full PDF download", "Data quality summary", "Missing and duplicate checks", "Basic charts", "Plain English insights"],
     action: "Request Full Report"
   },
   {
-    name: "Business Monthly",
-    price: "Rs. 9,500",
-    description: "For shops, academies, clinics, or sellers that need recurring reports.",
-    features: ["Up to 10 reports", "Template setup help", "Monthly trend tracking", "Priority review", "Custom recommendations"],
+    name: "Business Report",
+    price: "Rs. 700",
+    description: "A deeper report for shops, sellers, academies, clinics, and NGOs.",
+    features: ["Business mode analysis", "English and Roman Urdu insights", "Recommendations", "More detailed charts", "WhatsApp verification"],
+    action: "Request Business Report"
+  },
+  {
+    name: "Pro Report",
+    price: "Rs. 1,500",
+    description: "Best for important files that need a polished report and careful review.",
+    features: ["Full report package", "Priority manual verification", "PDF report workflow", "Template guidance", "Follow-up support on WhatsApp"],
     action: "Contact Us"
   }
 ];

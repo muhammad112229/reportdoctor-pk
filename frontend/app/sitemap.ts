@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { absoluteUrl, blogPosts, sampleReports, toolPages } from "@/lib/site";
+import { seoLandingPages } from "@/lib/seoLanding";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticPaths = [
@@ -16,10 +17,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/terms"
   ];
   const toolPaths = toolPages.map((tool) => `/tools/${tool.slug}`);
+  const seoPaths = seoLandingPages.map((page) => `/${page.slug}`);
   const blogPaths = blogPosts.map((post) => `/learn/${post.slug}`);
   const reportPaths = sampleReports.map((report) => `/sample-reports/${report.slug}`);
 
-  return [...staticPaths, ...toolPaths, ...blogPaths, ...reportPaths].map((path) => ({
+  return [...staticPaths, ...seoPaths, ...toolPaths, ...blogPaths, ...reportPaths].map((path) => ({
     url: absoluteUrl(path),
     lastModified: new Date("2026-06-14"),
     changeFrequency: path.includes("/blog/") ? "monthly" : "weekly",
