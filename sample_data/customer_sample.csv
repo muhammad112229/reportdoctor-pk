@@ -1,0 +1,7 @@
+customer_name,city,phone,last_purchase_date,total_spend,segment
+Ali Mobile,Lahore,03000000001,2026-04-20,10200,Repeat
+Sana Store,Karachi,03000000002,2026-04-02,9000,Wholesale
+Ahmed Traders,Lahore,03000000003,2026-04-10,11800,Wholesale
+Walk-in Customer,Rawalpindi,,2026-03-18,12400,Walk-in
+Khan Accessories,Multan,03000000004,2026-02-12,4200,New
+

@@ -1,0 +1,3 @@
+sku,item,category,current_stock,reorder_level,cost,price,sold_quantity
+SKU-001,Example Item,Accessories,20,5,500,800,12
+

@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: reportdoctor-api
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: FRONTEND_ORIGINS
+        sync: false
+      - key: PAID_UNLOCK_CODE
+        sync: false
+      - key: MAX_UPLOAD_MB
+        value: "10"
+      - key: MAX_COLUMNS
+        value: "200"
+      - key: REQUEST_TIMEOUT_SECONDS
+        value: "60"
+      - key: RATE_LIMIT_REQUESTS
+        value: "60"
+      - key: RATE_LIMIT_WINDOW_SECONDS
+        value: "60"
+

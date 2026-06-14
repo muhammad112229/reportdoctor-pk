@@ -1,0 +1,10 @@
+sku,item,category,current_stock,reorder_level,cost,price,sold_quantity
+SKU-001,USB-C Cable,Cables,18,10,350,600,42
+SKU-002,Fast Charger,Chargers,7,8,1200,1800,25
+SKU-003,Phone Cover,Accessories,60,15,250,500,38
+SKU-004,Screen Protector,Accessories,5,12,120,300,70
+SKU-005,Power Bank,Power,14,6,2600,3500,11
+SKU-006,Bluetooth Earbuds,Audio,3,5,3100,4500,8
+SKU-007,Car Charger,Chargers,24,8,900,1400,9
+SKU-008,OTG Adapter,Cables,44,10,180,350,16
+

@@ -1,0 +1,14 @@
+order_date,order_id,product,customer,quantity,amount,cost,city,channel
+2026-01-03,ORD-1001,USB-C Cable,Ali Mobile,3,1800,1050,Lahore,Shop
+2026-01-05,ORD-1002,Fast Charger,Sana Store,2,3600,2400,Karachi,Daraz
+2026-01-11,ORD-1003,Phone Cover,Walk-in Customer,5,2500,1250,Rawalpindi,Shop
+2026-02-02,ORD-1004,Fast Charger,Ahmed Traders,1,1800,1200,Lahore,Daraz
+2026-02-07,ORD-1005,Screen Protector,Walk-in Customer,8,2400,960,Multan,Shop
+2026-02-18,ORD-1006,USB-C Cable,Sana Store,4,2400,1400,Karachi,Daraz
+2026-03-04,ORD-1007,Power Bank,Ahmed Traders,2,7000,5200,Lahore,Shop
+2026-03-09,ORD-1008,Phone Cover,Ali Mobile,6,3000,1500,Lahore,Daraz
+2026-03-18,ORD-1009,Bluetooth Earbuds,Walk-in Customer,1,4500,3100,Faisalabad,Shop
+2026-04-02,ORD-1010,USB-C Cable,Sana Store,2,1200,700,Karachi,Daraz
+2026-04-10,ORD-1011,Screen Protector,Ahmed Traders,10,3000,1200,Lahore,Shop
+2026-04-20,ORD-1012,Fast Charger,Ali Mobile,3,5400,3600,Lahore,Shop
+

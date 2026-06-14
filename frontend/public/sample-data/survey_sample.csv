@@ -1,0 +1,9 @@
+response_id,response_date,respondent_group,overall_rating,service_quality,price_satisfaction,comments
+1,2026-01-01,Customer,5,Excellent,4,Fast service
+2,2026-01-02,Customer,4,Good,3,Price can improve
+3,2026-01-03,Student,5,Excellent,5,Very helpful
+4,2026-01-04,Customer,3,Average,3,Waiting time was high
+5,2026-01-05,NGO Participant,4,Good,4,Useful session
+6,2026-01-06,Customer,2,Poor,2,Need better follow-up
+7,2026-01-07,Student,5,Excellent,4,Clear explanation
+

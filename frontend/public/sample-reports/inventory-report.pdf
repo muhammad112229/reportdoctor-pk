@@ -1,0 +1,53 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 5 0 R >> >> /Contents 4 0 R >>
+endobj
+4 0 obj
+<< /Length 452 >>
+stream
+BT
+/F1 24 Tf
+72 770 Td
+(ReportDoctor.pk) Tj
+0 -34 Td
+/F1 18 Tf
+(Inventory Report) Tj
+0 -34 Td
+/F1 11 Tf
+(Sample PDF generated for the MVP website.) Tj
+0 -22 Td
+(- Total items: 8) Tj
+0 -22 Td
+(- Low stock items: 3) Tj
+0 -22 Td
+(- Estimated stock value: Rs. 396,400) Tj
+0 -22 Td
+(- Recommendation: reorder Screen Protector and Bluetooth Earbuds first) Tj
+0 -34 Td
+(Disclaimer: informational sample only; review real uploaded data before decisions.) Tj
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000121 00000 n 
+0000000247 00000 n 
+0000000750 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+820
+%%EOF

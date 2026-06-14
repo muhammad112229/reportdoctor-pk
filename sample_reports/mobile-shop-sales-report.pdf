@@ -1,0 +1,53 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 5 0 R >> >> /Contents 4 0 R >>
+endobj
+4 0 obj
+<< /Length 493 >>
+stream
+BT
+/F1 24 Tf
+72 770 Td
+(ReportDoctor.pk) Tj
+0 -34 Td
+/F1 18 Tf
+(Mobile Shop Sales Report) Tj
+0 -34 Td
+/F1 11 Tf
+(Sample PDF generated for the MVP website.) Tj
+0 -22 Td
+(- Total sales: Rs. 38,600) Tj
+0 -22 Td
+(- Top product: Fast Charger) Tj
+0 -22 Td
+(- Data quality: 0 duplicate rows, 0 missing amount cells) Tj
+0 -22 Td
+(- Recommendation: review low-stock accessories before next purchase) Tj
+0 -34 Td
+(Disclaimer: informational sample only; review real uploaded data before decisions.) Tj
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000121 00000 n 
+0000000247 00000 n 
+0000000791 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+861
+%%EOF

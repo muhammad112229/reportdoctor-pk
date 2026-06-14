@@ -1,0 +1,9 @@
+date,category,vendor,amount,payment_method,notes
+2026-01-01,Rent,Property Owner,50000,Bank Transfer,Monthly shop rent
+2026-01-03,Utilities,LESCO,9500,Online,Electricity bill
+2026-01-05,Delivery,Courier Partner,12000,Cash,Daraz parcel delivery
+2026-01-08,Marketing,Facebook Ads,18000,Card,Monthly campaign
+2026-02-01,Rent,Property Owner,50000,Bank Transfer,Monthly shop rent
+2026-02-04,Utilities,LESCO,8700,Online,Electricity bill
+2026-02-11,Supplies,Packaging Vendor,6500,Cash,Bags and labels
+
