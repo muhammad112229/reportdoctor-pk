@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { LogOut, Menu } from "lucide-react";
 import { useAuth } from "@/components/AuthProvider";
 import { site } from "@/lib/site";
@@ -16,6 +16,7 @@ const nav = [
 
 export function Header() {
   const router = useRouter();
+  const pathname = usePathname();
   const { session, loading, signOut } = useAuth();
 
   async function handleLogout() {
@@ -34,7 +35,12 @@ export function Header() {
       </Link>
       <nav className="desktop-nav" aria-label="Main navigation">
         {nav.map((item) => (
-          <Link href={item.href} key={item.href}>
+          <Link
+            href={item.href}
+            key={item.href}
+            className={isActivePath(pathname, item.href) ? "active" : undefined}
+            aria-current={isActivePath(pathname, item.href) ? "page" : undefined}
+          >
             {item.label}
           </Link>
         ))}
@@ -70,7 +76,12 @@ export function Header() {
         </summary>
         <div className="mobile-nav">
           {nav.map((item) => (
-            <Link href={item.href} key={item.href}>
+            <Link
+              href={item.href}
+              key={item.href}
+              className={isActivePath(pathname, item.href) ? "active" : undefined}
+              aria-current={isActivePath(pathname, item.href) ? "page" : undefined}
+            >
               {item.label}
             </Link>
           ))}
@@ -92,4 +103,8 @@ export function Header() {
       </details>
     </header>
   );
+}
+
+function isActivePath(pathname: string, href: string) {
+  return pathname === href || pathname.startsWith(`${href}/`);
 }

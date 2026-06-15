@@ -22,14 +22,14 @@ export function AdminReportsClient() {
 
   return (
     <AdminGate>
-      <section className="page-hero compact-hero">
+      <section className="page-hero portal-hero">
         <div>
           <p className="eyebrow">Admin reports</p>
           <h1>PDF unlock history</h1>
           <p>Audit recent paid PDF downloads and the users who generated them.</p>
         </div>
       </section>
-      <section className="section">
+      <section className="section portal-section">
         {error ? <div className="status-box error">{error}</div> : null}
         <div className="result-panel table-wrap">
           <table>
@@ -54,7 +54,12 @@ export function AdminReportsClient() {
               ))}
               {!reports.length ? (
                 <tr>
-                  <td colSpan={5}>No reports found.</td>
+                  <td colSpan={5}>
+                    <div className="empty-state">
+                      <strong>No reports found</strong>
+                      <span>Paid PDF unlocks will appear here after customers use report credits.</span>
+                    </div>
+                  </td>
                 </tr>
               ) : null}
             </tbody>

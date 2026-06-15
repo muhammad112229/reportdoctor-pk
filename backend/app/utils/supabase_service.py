@@ -222,6 +222,7 @@ class SupabaseService:
         return {
             "orders_total": len(orders),
             "pending_orders": len([order for order in orders if order.get("status") in {"pending", "sent_on_whatsapp"}]),
+            "approved_orders": len([order for order in orders if order.get("status") == "approved"]),
             "users_total": len(users),
             "reports_total": len(reports),
         }
@@ -251,6 +252,25 @@ class SupabaseService:
         for profile in profiles:
             profile["available_credits"] = credits_by_user.get(profile["id"], 0)
         return profiles
+
+    def grant_credit(self, user_id: str, credits: int) -> dict[str, Any]:
+        if credits <= 0:
+            raise SupabaseServiceError(400, "Credit grant must be at least 1.")
+
+        profile = self.fetch_profile(user_id)
+        if not profile:
+            raise SupabaseServiceError(404, "User profile was not found.")
+
+        return self._rest_insert(
+            "report_credits",
+            {
+                "user_id": user_id,
+                "order_id": None,
+                "credits_total": credits,
+                "credits_used": 0,
+                "status": "active",
+            },
+        )[0]
 
     def admin_reports(self) -> list[dict[str, Any]]:
         reports = self._rest_get(

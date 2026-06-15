@@ -228,7 +228,10 @@ export function AnalyzerClient() {
         </div>
         <form className="upload-form" onSubmit={runAnalysis}>
           <div className="field upload-field">
-            <label htmlFor="file">Upload CSV, XLSX, or XLS file</label>
+            <label className="upload-title" htmlFor="file">
+              <FileUp size={22} aria-hidden="true" />
+              Upload CSV, XLSX, or XLS file
+            </label>
             <input
               id="file"
               type="file"

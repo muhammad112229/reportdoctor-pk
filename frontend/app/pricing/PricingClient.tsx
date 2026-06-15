@@ -49,9 +49,10 @@ export function PricingClient() {
   return (
     <>
       {error ? <div className="status-box error">{error}</div> : null}
-      <div className="card-grid">
+      <div className="pricing-grid">
         {pricingTiers.map((tier) => (
-          <article className="price-card" key={tier.name}>
+          <article className={`price-card ${tier.id === "business-report" ? "recommended" : ""}`} key={tier.name}>
+            {tier.id === "business-report" ? <span className="recommendation-badge">Recommended</span> : null}
             <p className="eyebrow">{tier.name}</p>
             <h2>{tier.price}</h2>
             <p>{tier.description}</p>
@@ -68,7 +69,7 @@ export function PricingClient() {
             </div>
             <div className="card-footer">
               <button
-                className="button primary"
+                className={`button ${tier.id === "business-report" ? "primary" : "secondary"}`}
                 type="button"
                 onClick={() => selectPlan(tier)}
                 disabled={loading || creatingPlanId === tier.id}

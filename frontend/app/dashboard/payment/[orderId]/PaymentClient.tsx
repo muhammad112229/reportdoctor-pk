@@ -103,7 +103,7 @@ export function PaymentClient() {
 
   return (
     <>
-      <section className="page-hero compact-hero">
+      <section className="page-hero portal-hero">
         <div>
           <p className="eyebrow">Payment order</p>
           <h1>{order.plan?.name || order.plan_id}</h1>
@@ -115,7 +115,7 @@ export function PaymentClient() {
         </div>
       </section>
 
-      <section className="section dashboard-grid">
+      <section className="section portal-section dashboard-grid">
         <div className="result-panel payment-box">
           <p className="eyebrow">Easypaisa</p>
           <h2>Send payment</h2>

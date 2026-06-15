@@ -76,14 +76,14 @@ export function AccountClient() {
 
   return (
     <>
-      <section className="page-hero compact-hero">
+      <section className="page-hero portal-hero">
         <div>
           <p className="eyebrow">Account</p>
           <h1>Your profile</h1>
           <p>Keep your contact details updated so payment approvals and support messages go to the right place.</p>
         </div>
       </section>
-      <section className="section">
+      <section className="section portal-section auth-section">
         <div className="auth-card">
           <form className="upload-form" onSubmit={handleSubmit}>
             <div className="field">

@@ -43,6 +43,11 @@ class RejectOrderRequest(BaseModel):
     admin_note: str | None = None
 
 
+class GrantCreditRequest(BaseModel):
+    user_id: str = Field(min_length=1)
+    credits: int = Field(ge=1, le=100)
+
+
 @app.middleware("http")
 async def request_timeout_middleware(request, call_next):
     try:
@@ -247,6 +252,15 @@ def admin_users(request: Request) -> dict:
     try:
         supabase_service.require_admin(get_bearer_token(request))
         return {"users": supabase_service.admin_users()}
+    except SupabaseServiceError as exc:
+        raise HTTPException(status_code=exc.status_code, detail=exc.detail) from exc
+
+
+@app.post("/admin/users/grant-credit")
+def grant_user_credit(payload: GrantCreditRequest, request: Request) -> dict:
+    try:
+        supabase_service.require_admin(get_bearer_token(request))
+        return {"credit": supabase_service.grant_credit(payload.user_id, payload.credits)}
     except SupabaseServiceError as exc:
         raise HTTPException(status_code=exc.status_code, detail=exc.detail) from exc
 

@@ -28,7 +28,7 @@ const context = await browser.newContext({ acceptDownloads: true, viewport: { wi
 const page = await context.newPage();
 
 await page.goto("http://127.0.0.1:3000", { waitUntil: "domcontentloaded" });
-await expect(page.getByRole("heading", { name: "ReportDoctor.pk" })).toBeVisible();
+await expect(page.getByRole("heading", { name: "Turn messy Excel files into client-ready reports" })).toBeVisible();
 await page.waitForTimeout(1500);
 await page.goto("http://127.0.0.1:3000/free-scan", { waitUntil: "domcontentloaded" });
 await expect(page).toHaveURL(/\/free-scan$/);
@@ -40,7 +40,7 @@ await analyze(page, qualityXlsx, "Survey Data", { missing: "1", duplicates: "1" 
 
 await expect(page.getByRole("button", { name: /Sign in to unlock PDF/ })).toBeDisabled();
 await page.goto("http://127.0.0.1:3000/pricing", { waitUntil: "domcontentloaded" });
-await page.getByRole("button", { name: /Request Full Report/ }).click();
+await page.getByRole("button", { name: /Select Basic/ }).click();
 await expect(page).toHaveURL(/\/signin\?next=%2Fpricing|\/signin\?next=\/pricing/);
 await expect(page.getByRole("heading", { name: "Sign in" })).toBeVisible();
 

@@ -1,15 +1,20 @@
 import Link from "next/link";
 import {
   ArrowRight,
+  BookOpen,
   CreditCard,
   Download,
   FileCheck2,
   FileSpreadsheet,
-  KeyRound,
+  GraduationCap,
   LineChart,
   MessageCircle,
   SearchCheck,
-  ShieldCheck
+  ShieldCheck,
+  ShoppingBag,
+  Sparkles,
+  Stethoscope,
+  Store
 } from "lucide-react";
 import { TrustStrip } from "@/components/TrustStrip";
 import { blogPosts, pricingTiers, sampleReports, site, templates, toolPages } from "@/lib/site";
@@ -27,8 +32,8 @@ const howItWorks = [
   },
   {
     icon: CreditCard,
-    title: "Pay for full PDF report",
-    text: "If the preview is useful, pay through Easypaisa and request the full report unlock."
+    title: "Buy report credits",
+    text: "If the preview is useful, choose Basic, Business, or Pro and send payment through Easypaisa."
   },
   {
     icon: MessageCircle,
@@ -36,10 +41,18 @@ const howItWorks = [
     text: "Send the payment screenshot to WhatsApp so the report request can be verified manually."
   },
   {
-    icon: KeyRound,
-    title: "Receive unlock code",
-    text: "Enter the private unlock code, generate the full PDF, and review it before business decisions."
+    icon: Sparkles,
+    title: "Download with credit",
+    text: "After approval, your report credit activates automatically and you can download the full PDF."
   }
+];
+
+const audiences = [
+  { icon: Store, title: "Shopkeepers", text: "Daily sales, inventory, and expenses in one quick scan." },
+  { icon: ShoppingBag, title: "Daraz sellers", text: "Understand orders, products, revenue, and slow movers." },
+  { icon: GraduationCap, title: "Academies", text: "Fee sheets, attendance exports, and student records." },
+  { icon: Stethoscope, title: "Clinics", text: "Patient visits, service trends, and operational summaries." },
+  { icon: BookOpen, title: "Students & researchers", text: "Survey results, missing values, and clean summaries." }
 ];
 
 const demoPreviews = [
@@ -71,24 +84,46 @@ export default function HomePage() {
       <section className="hero">
         <div className="hero-inner">
           <p className="eyebrow">Data reports for Pakistani businesses</p>
-          <h1>{site.name}</h1>
+          <h1>Turn messy Excel files into client-ready reports</h1>
           <p>
-            {site.tagline} Upload CSV or Excel files and get data quality checks, charts, business insights, and a
-            professional PDF report workflow.
+            {site.tagline} Get a free spreadsheet scan with data quality checks, charts, and plain-language business
+            insights, then unlock a polished PDF when it is worth sharing.
           </p>
           <div className="hero-actions">
-            <Link className="button secondary" href="/free-scan">
-              Upload Excel/CSV File
-            </Link>
             <Link className="button primary" href="/free-scan">
               Generate Free Report
               <ArrowRight size={18} aria-hidden="true" />
             </Link>
             <Link className="button secondary" href="/sample-reports">
-              View Sample Reports
+              View Sample Report
             </Link>
           </div>
-          <p className="hero-footnote">Roman Urdu support: file upload karein, report samjhein, next steps follow karein.</p>
+          <div className="hero-proof">
+            <span>No signup for Free Scan</span>
+            <span>CSV, XLSX, XLS</span>
+            <span>English + Roman Urdu</span>
+          </div>
+        </div>
+        <div className="hero-product" aria-hidden="true">
+          <div className="product-window">
+            <div className="product-window-top"><span /><span /><span /></div>
+            <div className="product-panel">
+              <div>
+                <span>Available credit</span>
+                <strong>3</strong>
+              </div>
+              <div>
+                <span>Missing cells</span>
+                <strong>1</strong>
+              </div>
+              <div>
+                <span>Duplicate rows</span>
+                <strong>0</strong>
+              </div>
+            </div>
+            <div className="product-chart"><span /><span /><span /><span /><span /></div>
+            <div className="product-lines"><span /><span /><span /></div>
+          </div>
         </div>
       </section>
 
@@ -102,6 +137,20 @@ export default function HomePage() {
             <article className="step-card" key={title}>
               <span>{index + 1}</span>
               <Icon size={24} aria-hidden="true" />
+              <h3>{title}</h3>
+              <p>{text}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="section">
+        <p className="eyebrow">Who can use it?</p>
+        <h2>Built for practical teams, owners, and researchers</h2>
+        <div className="audience-grid">
+          {audiences.map(({ icon: Icon, title, text }) => (
+            <article className="audience-card" key={title}>
+              <Icon size={22} aria-hidden="true" />
               <h3>{title}</h3>
               <p>{text}</p>
             </article>

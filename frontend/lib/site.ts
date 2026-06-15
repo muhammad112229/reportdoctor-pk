@@ -312,7 +312,7 @@ export const pricingTiers = [
     credits: 1,
     description: "A clean PDF report for simple files and quick sharing.",
     features: ["Full PDF download", "Data quality summary", "Missing and duplicate checks", "Basic charts", "Plain English insights"],
-    action: "Request Full Report",
+    action: "Select Basic",
     isPaid: true
   },
   {
@@ -323,7 +323,7 @@ export const pricingTiers = [
     credits: 3,
     description: "A deeper report for shops, sellers, academies, clinics, and NGOs.",
     features: ["Business mode analysis", "English and Roman Urdu insights", "Recommendations", "More detailed charts", "WhatsApp verification"],
-    action: "Request Business Report",
+    action: "Select Business",
     isPaid: true
   },
   {
@@ -334,7 +334,7 @@ export const pricingTiers = [
     credits: 7,
     description: "Best for important files that need a polished report and careful review.",
     features: ["Full report package", "Priority manual verification", "PDF report workflow", "Template guidance", "Follow-up support on WhatsApp"],
-    action: "Contact Us",
+    action: "Select Pro",
     isPaid: true
   }
 ];

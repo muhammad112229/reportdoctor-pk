@@ -59,7 +59,7 @@ export function DashboardClient() {
 
   return (
     <>
-      <section className="page-hero compact-hero">
+      <section className="page-hero portal-hero">
         <div>
           <p className="eyebrow">Dashboard</p>
           <h1>Welcome{activeProfile?.full_name ? `, ${activeProfile.full_name}` : ""}</h1>
@@ -81,7 +81,7 @@ export function DashboardClient() {
         </div>
       </section>
 
-      <section className="section dashboard-stack">
+      <section className="section portal-section dashboard-stack">
         {error ? <div className="status-box error">{error}</div> : null}
         <div className="metric-grid">
           <div className="metric">
@@ -124,10 +124,16 @@ export function DashboardClient() {
                 <div className="credit-row" key={credit.id}>
                   <CreditCard size={18} aria-hidden="true" />
                   <span>{Math.max(0, credit.credits_total - credit.credits_used)} of {credit.credits_total} left</span>
-                  <span className="status-pill">{credit.status}</span>
+                  <span className={`status-pill ${credit.status}`}>{credit.status}</span>
                 </div>
               ))}
-              {!summary?.credits.length ? <p className="muted">No paid report credits yet.</p> : null}
+              {!summary?.credits.length ? (
+                <div className="empty-state">
+                  <strong>No credits yet</strong>
+                  <span>Choose a paid report plan when you are ready to unlock a PDF.</span>
+                  <Link className="button secondary" href="/pricing">Buy report credits</Link>
+                </div>
+              ) : null}
             </div>
           </section>
         </div>
@@ -151,14 +157,20 @@ export function DashboardClient() {
                   <tr key={order.id}>
                     <td>{order.plan?.name || order.plan_id}</td>
                     <td>Rs. {order.amount_pkr.toLocaleString()}</td>
-                    <td><span className="status-pill">{order.status}</span></td>
+                    <td><span className={`status-pill ${order.status}`}>{order.status}</span></td>
                     <td>{formatDate(order.created_at)}</td>
                     <td><Link href={`/dashboard/payment/${order.id}`}>Open</Link></td>
                   </tr>
                 ))}
                 {!summary?.orders.length ? (
                   <tr>
-                    <td colSpan={5}>No orders yet.</td>
+                    <td colSpan={5}>
+                      <div className="empty-state">
+                        <strong>No orders yet</strong>
+                        <span>Your paid report requests will appear here.</span>
+                        <Link className="button secondary" href="/pricing">View pricing</Link>
+                      </div>
+                    </td>
                   </tr>
                 ) : null}
               </tbody>
@@ -190,7 +202,13 @@ export function DashboardClient() {
                 ))}
                 {!reports.length ? (
                   <tr>
-                    <td colSpan={4}>No reports downloaded yet.</td>
+                    <td colSpan={4}>
+                      <div className="empty-state">
+                        <strong>No reports yet</strong>
+                        <span>Run a free scan first, then unlock a PDF with a report credit.</span>
+                        <Link className="button secondary" href="/free-scan">Generate free report</Link>
+                      </div>
+                    </td>
                   </tr>
                 ) : null}
               </tbody>

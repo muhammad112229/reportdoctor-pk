@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { CheckCircle2, Loader2, XCircle } from "lucide-react";
 import { AdminGate } from "../AdminGate";
 import { useAuth } from "@/components/AuthProvider";
@@ -16,6 +16,7 @@ export function AdminOrdersClient() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [notes, setNotes] = useState<Record<string, string>>({});
   const [busyOrderId, setBusyOrderId] = useState<string | null>(null);
+  const [status, setStatus] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const pendingOrders = useMemo(
@@ -23,7 +24,7 @@ export function AdminOrdersClient() {
     [orders]
   );
 
-  async function loadOrders() {
+  const loadOrders = useCallback(async () => {
     if (!session) {
       return;
     }
@@ -34,19 +35,21 @@ export function AdminOrdersClient() {
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Could not load admin orders.");
     }
-  }
+  }, [session]);
 
   useEffect(() => {
     void loadOrders();
-  }, [session]);
+  }, [loadOrders]);
 
   async function approve(orderId: string) {
-    if (!session) {
+    if (!session || !confirm("Approve this payment order and grant the plan credits?")) {
       return;
     }
     setBusyOrderId(orderId);
+    setStatus(null);
     try {
       await fetchJson(`/admin/orders/${orderId}/approve`, session, { method: "POST" });
+      setStatus("Order approved and report credits activated.");
       await loadOrders();
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Could not approve order.");
@@ -56,15 +59,17 @@ export function AdminOrdersClient() {
   }
 
   async function reject(orderId: string) {
-    if (!session) {
+    if (!session || !confirm("Reject this payment order?")) {
       return;
     }
     setBusyOrderId(orderId);
+    setStatus(null);
     try {
       await fetchJson(`/admin/orders/${orderId}/reject`, session, {
         method: "POST",
         body: JSON.stringify({ admin_note: notes[orderId] || "Payment screenshot could not be verified." })
       });
+      setStatus("Order rejected.");
       await loadOrders();
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Could not reject order.");
@@ -75,16 +80,24 @@ export function AdminOrdersClient() {
 
   return (
     <AdminGate>
-      <section className="page-hero compact-hero">
+      <section className="page-hero portal-hero">
         <div>
           <p className="eyebrow">Admin orders</p>
           <h1>Pending payment requests</h1>
           <p>Review Easypaisa payment screenshots sent on WhatsApp, then approve credits or reject with a note.</p>
         </div>
       </section>
-      <section className="section">
+      <section className="section portal-section">
         {error ? <div className="status-box error">{error}</div> : null}
+        {status ? <div className="status-box">{status}</div> : null}
         <div className="result-panel">
+          <div className="panel-toolbar">
+            <div>
+              <p className="eyebrow">Payments</p>
+              <h2>Orders needing review</h2>
+            </div>
+            <span className="status-pill pending">{pendingOrders.length} pending</span>
+          </div>
           <div className="table-wrap">
             <table>
               <thead>
@@ -108,7 +121,7 @@ export function AdminOrdersClient() {
                     <td>{order.profile?.whatsapp || "Not provided"}</td>
                     <td>{order.plan?.name || order.plan_id}</td>
                     <td>Rs. {order.amount_pkr.toLocaleString()}</td>
-                    <td><span className="status-pill">{order.status}</span></td>
+                    <td><span className={`status-pill ${order.status}`}>{order.status}</span></td>
                     <td>
                       <input
                         className="table-input"
@@ -133,7 +146,12 @@ export function AdminOrdersClient() {
                 ))}
                 {!pendingOrders.length ? (
                   <tr>
-                    <td colSpan={7}>No pending orders.</td>
+                    <td colSpan={7}>
+                      <div className="empty-state">
+                        <strong>No pending payments</strong>
+                        <span>New paid plan requests will appear here after customers submit payment screenshots.</span>
+                      </div>
+                    </td>
                   </tr>
                 ) : null}
               </tbody>
