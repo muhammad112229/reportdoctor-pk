@@ -31,7 +31,7 @@ export function getSupabaseDiagnostics() {
     anonKeyConfigured: Boolean(supabaseAnonKey),
     urlHost,
     urlHostMatchesExpected: urlHost === EXPECTED_SUPABASE_HOST,
-    anonKeyPrefixValid: Boolean(supabaseAnonKey && supabaseAnonKey.length > 20 && supabaseAnonKey.startsWith("eyJ")),
+    anonKeyPrefixValid: hasValidPublicKeyShape(supabaseAnonKey),
     expectedHost: EXPECTED_SUPABASE_HOST
   };
 }
@@ -79,4 +79,12 @@ function getSupabaseUrlHost() {
   } catch {
     return null;
   }
+}
+
+function hasValidPublicKeyShape(value: string | undefined) {
+  if (!value || value.length <= 20) {
+    return false;
+  }
+
+  return value.startsWith("eyJ") || value.startsWith("sb_publishable_");
 }
