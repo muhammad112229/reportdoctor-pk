@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Loader2, UserPlus } from "lucide-react";
 import { useAuth } from "@/components/AuthProvider";
-import { requireSupabaseConfig, supabase } from "@/lib/supabase";
+import { getSafeAuthErrorMessage, logSafeSupabaseDiagnostics, requireSupabaseConfig, supabase } from "@/lib/supabase";
 
 export function SignUpForm() {
   const router = useRouter();
@@ -26,6 +26,7 @@ export function SignUpForm() {
 
     try {
       requireSupabaseConfig();
+      logSafeSupabaseDiagnostics("signup:start");
       const cleanEmail = email.trim();
       const { data, error: signUpError } = await supabase.auth.signUp({
         email: cleanEmail,
@@ -40,6 +41,7 @@ export function SignUpForm() {
       if (signUpError) {
         throw signUpError;
       }
+      logSafeSupabaseDiagnostics("signup:auth-success");
 
       if (data.user && data.session) {
         const { error: profileError } = await supabase.from("profiles").upsert(
@@ -53,7 +55,8 @@ export function SignUpForm() {
           { onConflict: "id" }
         );
         if (profileError) {
-          throw profileError;
+          setError(`Account created, but profile setup failed: ${profileError.message}`);
+          return;
         }
         await refreshAccountData(data.session);
         router.push("/dashboard");
@@ -63,7 +66,8 @@ export function SignUpForm() {
 
       setStatus("Account created. Please confirm your email, then sign in.");
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : "Could not create your account. Please try again.");
+      logSafeSupabaseDiagnostics("signup:error");
+      setError(getSafeAuthErrorMessage(caught, "signup"));
     } finally {
       setSubmitting(false);
     }

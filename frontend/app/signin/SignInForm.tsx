@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Loader2, LogIn } from "lucide-react";
 import { useAuth } from "@/components/AuthProvider";
-import { requireSupabaseConfig, supabase } from "@/lib/supabase";
+import { getSafeAuthErrorMessage, logSafeSupabaseDiagnostics, requireSupabaseConfig, supabase } from "@/lib/supabase";
 
 export function SignInForm() {
   const router = useRouter();
@@ -33,6 +33,7 @@ export function SignInForm() {
 
     try {
       requireSupabaseConfig();
+      logSafeSupabaseDiagnostics("signin:start");
       const { data, error: signInError } = await supabase.auth.signInWithPassword({
         email: email.trim(),
         password
@@ -45,7 +46,8 @@ export function SignInForm() {
       router.push(nextPath);
       router.refresh();
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : "Could not sign in. Please try again.");
+      logSafeSupabaseDiagnostics("signin:error");
+      setError(getSafeAuthErrorMessage(caught, "signin"));
     } finally {
       setSubmitting(false);
     }
