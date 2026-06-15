@@ -29,6 +29,11 @@ def test_build_sales_analysis_detects_basic_metrics():
     assert result["quality"]["duplicate_rows"] == 0
     assert any(metric["label"] == "Total sales" for metric in result["metrics"])
     assert len(result["charts"]) <= 2
+    assert result["data_doctor_diagnosis"]["score"] > 0
+    assert result["business_health_score"]["score"] is not None
+    assert "total sales" in result["ask_my_data"]["answers"]
+    assert result["consultant_report"]["executive_summary"]
+    assert result["smart_dashboard"]["recommended_charts"]
 
 
 def test_validate_upload_rejects_unsupported_extension():

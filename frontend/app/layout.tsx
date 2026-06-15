@@ -29,10 +29,10 @@ export const metadata: Metadata = {
     siteName: site.name,
     images: [
       {
-        url: "/og-image.svg",
-        width: 1200,
-        height: 630,
-        alt: "ReportDoctor.pk Excel and CSV report generator"
+        url: "/branding/hero-cover.png",
+        width: 1680,
+        height: 900,
+        alt: "ReportDoctor AI Data Consultant for Excel and CSV reports"
       }
     ]
   },
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `${site.name} | Excel/CSV Reports for Pakistani Businesses`,
     description: site.description,
-    images: ["/og-image.svg"]
+    images: ["/branding/hero-cover.png"]
   }
 };
 

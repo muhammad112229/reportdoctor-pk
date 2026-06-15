@@ -6,6 +6,8 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
+from app.utils.ai_report_agent import build_consultant_report
+
 try:
     from sklearn.decomposition import PCA
     from sklearn.impute import SimpleImputer
@@ -54,6 +56,23 @@ def build_analysis(
     all_charts = build_charts(df, detected)
     charts = all_charts if is_full_report else all_charts[:2]
     insights_en, insights_roman_urdu = build_insights(df, mode, detected, quality, metrics)
+    recommendations = build_recommendations(mode, detected, quality)
+    diagnosis = build_data_doctor_diagnosis(df, detected, quality)
+    business_health = build_business_health_score(df, mode, detected, quality)
+    chart_explanations = explain_charts(all_charts, detected)
+    smart_dashboard = build_smart_dashboard(df, detected, metrics, all_charts, chart_explanations, is_full_report)
+    ask_my_data = build_ask_my_data(df, detected, quality, metrics, diagnosis, business_health)
+    consultant_report = build_consultant_report(
+        dataset={"rows": int(df.shape[0]), "columns": int(df.shape[1])},
+        quality=quality,
+        metrics=metrics,
+        diagnosis=diagnosis,
+        business_health=business_health,
+        recommendations=recommendations,
+        chart_explanations=chart_explanations,
+    )
+    if not is_full_report:
+        consultant_report = limited_consultant_report(consultant_report)
 
     return {
         "file_name": file_name,
@@ -76,9 +95,16 @@ def build_analysis(
         "quality": quality,
         "metrics": metrics,
         "charts": charts,
+        "chart_explanations": chart_explanations[: len(charts)],
+        "data_doctor_diagnosis": diagnosis if is_full_report else limited_diagnosis(diagnosis),
+        "business_health_score": business_health,
+        "smart_dashboard": smart_dashboard,
+        "ask_my_data": ask_my_data,
+        "consultant_report": consultant_report,
+        "feature_access": build_feature_access(is_full_report),
         "insights_en": insights_en,
         "insights_roman_urdu": insights_roman_urdu,
-        "recommendations": build_recommendations(mode, detected, quality),
+        "recommendations": recommendations,
         "beginner_guidance": build_beginner_guidance(mode, detected) if beginner_mode else [],
         "locked_features": [] if is_full_report else locked_features(),
     }
@@ -191,6 +217,231 @@ def build_quality(df: pd.DataFrame) -> dict[str, Any]:
         "duplicate_rows": int(df.duplicated().sum()),
         "missing_total": int(df.isna().sum().sum()),
         "missing_by_column": missing_by_column,
+    }
+
+
+def build_data_doctor_diagnosis(df: pd.DataFrame, detected: DetectedColumns, quality: dict[str, Any]) -> dict[str, Any]:
+    total_cells = max(int(df.shape[0] * df.shape[1]), 1)
+    missing_total = int(quality["missing_total"])
+    duplicate_rows = int(quality["duplicate_rows"])
+    missing_percent = (missing_total / total_cells) * 100
+    duplicate_percent = (duplicate_rows / max(len(df), 1)) * 100
+    weak_columns = weak_or_empty_columns(detected)
+    outliers = detect_outliers(df, detected.numeric)
+    inconsistent = detect_inconsistent_values(df, detected.categorical)
+
+    score = 100
+    score -= min(35, missing_percent * 1.4)
+    score -= min(25, duplicate_percent * 2.2)
+    score -= min(15, len(weak_columns) * 4)
+    score -= min(15, len(outliers) * 3)
+    score -= min(10, len(inconsistent) * 3)
+    score = int(max(0, round(score)))
+    severity = health_severity(score)
+
+    risks: list[str] = []
+    if missing_total:
+        risks.append(f"{format_number(missing_total)} missing cells may weaken reporting accuracy.")
+    if duplicate_rows:
+        risks.append(f"{format_number(duplicate_rows)} duplicate rows may inflate totals or counts.")
+    if weak_columns:
+        risks.append(f"Weak or empty columns need review: {', '.join(weak_columns[:4])}.")
+    if outliers:
+        risks.append(f"Outliers were detected in {', '.join(item['column'] for item in outliers[:3])}.")
+    if inconsistent:
+        risks.append(f"Inconsistent labels may exist in {', '.join(item['column'] for item in inconsistent[:3])}.")
+    if not risks:
+        risks.append("No major quality risks were detected in the available scan.")
+
+    prescription = [
+        "Remove exact duplicate rows before final reporting.",
+        "Fill, label, or intentionally mark blank values in important fields.",
+        "Standardize dates, categories, product names, and customer names.",
+    ]
+    if outliers:
+        prescription.append("Review unusual numeric values before sharing KPIs.")
+    if weak_columns:
+        prescription.append("Remove empty columns or rename weak columns with clearer business labels.")
+
+    return {
+        "score": score,
+        "severity": severity,
+        "summary": f"Dataset has {severity.lower()} data quality based on missing values, duplicates, weak columns, outliers, and consistency checks.",
+        "diagnosis": f"Dataset has {severity.lower()} data quality issues.",
+        "risk": risks[0],
+        "impact": "Insights may be incomplete or misleading if these issues affect key business columns." if score < 80 else "The file is suitable for reporting, with only minor checks recommended.",
+        "prescription": prescription,
+        "risks": risks,
+        "missing_summary": f"{format_number(missing_total)} missing cells ({safe_round(missing_percent)}% of cells).",
+        "duplicate_summary": f"{format_number(duplicate_rows)} duplicate rows ({safe_round(duplicate_percent)}% of rows).",
+        "weak_columns": weak_columns,
+        "outlier_warnings": outliers,
+        "inconsistent_values": inconsistent,
+    }
+
+
+def build_business_health_score(
+    df: pd.DataFrame,
+    mode: str,
+    detected: DetectedColumns,
+    quality: dict[str, Any],
+) -> dict[str, Any] | None:
+    mappings = detected.suggested_mappings
+    mode_key = infer_business_mode(mode, mappings)
+    amount = numeric_series(df, mappings.get("amount"))
+    date_col = mappings.get("date")
+    product_col = mappings.get("product") or mappings.get("category")
+    customer_col = mappings.get("customer")
+    stock = numeric_series(df, mappings.get("stock"))
+    cost = numeric_series(df, mappings.get("cost"))
+
+    if mode_key in {"general", "survey"} and amount is None and stock is None:
+        return {
+            "score": None,
+            "grade": "Not enough business signals",
+            "mode": mode_key,
+            "explanation": "Business health needs amount, revenue, stock, cost, category, customer, or date columns.",
+            "main_risks": ["Business scoring is limited because key commercial columns were not detected."],
+            "opportunities": ["Add amount/revenue, date, product/category, customer, stock, and cost columns for richer scoring."],
+            "recommended_actions": ["Use a ReportDoctor.pk template before the next upload."],
+        }
+
+    score = 82
+    risks: list[str] = []
+    opportunities: list[str] = []
+    actions: list[str] = []
+
+    if quality["duplicate_rows"]:
+        score -= min(12, quality["duplicate_rows"] * 2)
+        risks.append("Duplicate rows can overstate business performance.")
+        actions.append("Deduplicate orders or invoices before calculating final totals.")
+    if quality["missing_total"]:
+        score -= min(12, quality["missing_total"] / max(df.shape[0], 1) * 4)
+        risks.append("Missing values can weaken KPI interpretation.")
+
+    trend = revenue_trend_signal(df, date_col, amount)
+    if trend:
+        score += trend["score_delta"]
+        (opportunities if trend["score_delta"] >= 0 else risks).append(trend["message"])
+        actions.append(trend["action"])
+
+    concentration = concentration_signal(df, product_col, amount)
+    if concentration:
+        score += concentration["score_delta"]
+        (opportunities if concentration["score_delta"] >= 0 else risks).append(concentration["message"])
+        actions.append(concentration["action"])
+
+    if stock is not None:
+        low_stock = int((stock <= 5).sum())
+        if low_stock:
+            score -= min(14, low_stock * 2)
+            risks.append(f"{format_number(low_stock)} low-stock rows may create fulfillment risk.")
+            actions.append("Review reorder levels and replenish fast-moving low-stock items.")
+        else:
+            opportunities.append("No obvious low-stock risk was detected from available stock values.")
+
+    if amount is not None and cost is not None:
+        profit = float((amount - cost).sum())
+        if profit < 0:
+            score -= 18
+            risks.append("Estimated profit is negative from amount and cost columns.")
+            actions.append("Review pricing, costs, discounts, and returns.")
+        else:
+            score += 4
+            opportunities.append("Estimated profit is positive from available amount and cost columns.")
+
+    if customer_col in df.columns and amount is not None:
+        customer_concentration = concentration_signal(df, customer_col, amount, label="customer")
+        if customer_concentration:
+            score += customer_concentration["score_delta"]
+            (opportunities if customer_concentration["score_delta"] >= 0 else risks).append(customer_concentration["message"])
+
+    score = int(max(0, min(100, round(score))))
+    return {
+        "score": score,
+        "grade": business_grade(score),
+        "mode": mode_key,
+        "explanation": f"Business score reflects {mode_key} signals, data quality, trend, concentration, stock, and profit indicators where available.",
+        "main_risks": dedupe_strings(risks)[:5] or ["No major business risk was detected from the available columns."],
+        "opportunities": dedupe_strings(opportunities)[:5] or ["Add richer business columns to unlock deeper opportunities."],
+        "recommended_actions": dedupe_strings(actions)[:6] or ["Track this dataset with the same template each month."],
+    }
+
+
+def build_smart_dashboard(
+    df: pd.DataFrame,
+    detected: DetectedColumns,
+    metrics: list[dict[str, str]],
+    charts: list[dict[str, Any]],
+    chart_explanations: list[dict[str, str]],
+    is_full_report: bool,
+) -> dict[str, Any]:
+    recommended = chart_explanations if is_full_report else chart_explanations[:2]
+    return {
+        "kpis": metrics[:8] if is_full_report else metrics[:4],
+        "recommended_charts": recommended,
+        "layout_hint": "Use KPIs first, then trend and breakdown charts, then data-quality charts.",
+        "chart_strategy": recommended_chart_strategy(detected),
+        "is_limited": not is_full_report,
+        "summary": f"Smart Dashboard generated {len(metrics[:8] if is_full_report else metrics[:4])} KPI cards and {len(recommended)} recommended chart explanations from {format_number(df.shape[0])} rows.",
+    }
+
+
+def build_ask_my_data(
+    df: pd.DataFrame,
+    detected: DetectedColumns,
+    quality: dict[str, Any],
+    metrics: list[dict[str, str]],
+    diagnosis: dict[str, Any],
+    business_health: dict[str, Any] | None,
+) -> dict[str, Any]:
+    mappings = detected.suggested_mappings
+    amount_col = mappings.get("amount")
+    product_col = mappings.get("product")
+    category_col = mappings.get("category")
+    date_col = mappings.get("date")
+    amount = numeric_series(df, amount_col)
+    answers = {
+        "total rows": f"The dataset has {format_number(df.shape[0])} rows.",
+        "total columns": f"The dataset has {format_number(df.shape[1])} columns.",
+        "missing values": f"There are {format_number(quality['missing_total'])} missing cells.",
+        "duplicate rows": f"There are {format_number(quality['duplicate_rows'])} duplicate rows.",
+        "data health score": f"Data Health Score is {diagnosis['score']}/100 ({diagnosis['severity']}).",
+        "what should i improve": " ".join(diagnosis["prescription"][:3]),
+        "summary of this dataset": f"This file has {format_number(df.shape[0])} rows, {format_number(df.shape[1])} columns, {format_number(quality['missing_total'])} missing cells, and {format_number(quality['duplicate_rows'])} duplicate rows.",
+    }
+    if amount is not None:
+        answers["total sales"] = f"Total detected revenue/sales is {currency(float(amount.sum()))}."
+        answers["total revenue"] = answers["total sales"]
+    if product_col in df.columns and amount is not None:
+        top = top_group_value(df, product_col, amount_col or "")
+        if top:
+            answers["top product"] = f"Top product is {top[0]} with {currency(top[1])}."
+    if category_col in df.columns and amount is not None:
+        top = top_group_value(df, category_col, amount_col or "")
+        if top:
+            answers["top category"] = f"Top category is {top[0]} with {currency(top[1])}."
+    if date_col in df.columns and amount is not None:
+        best_worst = best_worst_month(df, date_col, amount_col or "")
+        if best_worst:
+            answers["best month"] = f"Best month is {best_worst['best_month']} with {currency(best_worst['best_value'])}."
+            answers["worst month"] = f"Worst month is {best_worst['worst_month']} with {currency(best_worst['worst_value'])}."
+    if business_health and business_health.get("score") is not None:
+        answers["business health score"] = f"Business Health Score is {business_health['score']}/100 ({business_health['grade']})."
+
+    return {
+        "suggestions": [
+            "What is the summary of this dataset?",
+            "What is the data health score?",
+            "What should I improve?",
+            "What are the missing values?",
+            "What are the duplicate rows?",
+            "What is the total sales?",
+            "What is the top product?",
+            "What is the best month?",
+        ],
+        "answers": answers,
+        "unsupported_message": "I can answer common questions about totals, trends, top categories, missing values, duplicates, and data quality. Please ask one of those.",
     }
 
 
@@ -333,6 +584,12 @@ def build_charts(df: pd.DataFrame, detected: DetectedColumns) -> list[dict[str, 
     if detected.categorical:
         charts.append(categorical_count_chart(df, detected.categorical[0]))
 
+    if detected.categorical and detected.numeric:
+        charts.append(category_numeric_bar_chart(df, detected.categorical[0], detected.numeric[0]))
+
+    if detected.categorical:
+        charts.append(category_distribution_pie_chart(df, detected.categorical[0]))
+
     if len(detected.numeric) >= 2:
         charts.append(correlation_heatmap(df, detected.numeric[:8]))
 
@@ -388,6 +645,53 @@ def categorical_count_chart(df: pd.DataFrame, column: str) -> dict[str, Any]:
                 }
             ],
             "layout": {"yaxis": {"title": "Count"}, "xaxis": {"title": column}},
+        },
+    }
+
+
+def category_numeric_bar_chart(df: pd.DataFrame, category_column: str, value_column: str) -> dict[str, Any]:
+    values = pd.to_numeric(df[value_column], errors="coerce")
+    grouped = (
+        df.assign(_value=values)
+        .dropna(subset=["_value"])
+        .groupby(category_column)["_value"]
+        .sum()
+        .sort_values(ascending=False)
+        .head(10)
+    )
+    return {
+        "id": f"top-{slugify(category_column)}-by-{slugify(value_column)}",
+        "title": f"Top {category_column} by {value_column}",
+        "plotly": {
+            "data": [
+                {
+                    "type": "bar",
+                    "x": [str(value)[:38] for value in grouped.index],
+                    "y": grouped.round(2).tolist(),
+                    "marker": {"color": "#0d9488"},
+                }
+            ],
+            "layout": {"yaxis": {"title": value_column}, "xaxis": {"title": category_column}},
+        },
+    }
+
+
+def category_distribution_pie_chart(df: pd.DataFrame, column: str) -> dict[str, Any]:
+    counts = df[column].astype(str).replace("nan", "Missing").value_counts().head(8)
+    return {
+        "id": f"share-{slugify(column)}",
+        "title": f"Distribution Share: {column}",
+        "plotly": {
+            "data": [
+                {
+                    "type": "pie",
+                    "labels": [str(value)[:38] for value in counts.index],
+                    "values": [int(value) for value in counts.values],
+                    "hole": 0.45,
+                    "marker": {"colors": ["#0d9488", "#2563eb", "#14b8a6", "#f59e0b", "#64748b", "#0f766e", "#38bdf8", "#94a3b8"]},
+                }
+            ],
+            "layout": {},
         },
     }
 
@@ -547,11 +851,240 @@ def build_beginner_guidance(mode: str, detected: DetectedColumns) -> list[str]:
 
 def locked_features() -> list[str]:
     return [
-        "All available charts instead of the first two",
-        "Full PDF report with cover page, data quality section, insights, recommendations, and disclaimer",
-        "Business-mode details for sales, inventory, expenses, customers, or surveys",
-        "Manual review workflow after JazzCash, Easypaisa, or bank transfer payment",
+        "Full Data Doctor Diagnosis with every risk and prescription",
+        "Full Smart Dashboard with all recommended charts",
+        "Full AI Consultant report with risks, opportunities, and action plan",
+        "Premium PDF report with cover page, health scores, findings, and 30-day plan",
+        "Manual Easypaisa approval workflow and automatic report credit activation",
     ]
+
+
+def weak_or_empty_columns(detected: DetectedColumns) -> list[str]:
+    weak = []
+    for profile in detected.profiles:
+        name = str(profile["name"])
+        if profile["missing_percent"] >= 80:
+            weak.append(name)
+        elif profile["unique"] == 0:
+            weak.append(name)
+        elif len(name.strip()) <= 1 or name.lower().startswith("unnamed"):
+            weak.append(name)
+    return weak
+
+
+def detect_outliers(df: pd.DataFrame, numeric_columns: list[str]) -> list[dict[str, Any]]:
+    warnings: list[dict[str, Any]] = []
+    for column in numeric_columns[:8]:
+        values = pd.to_numeric(df[column], errors="coerce").dropna()
+        if len(values) < 8:
+            continue
+        q1 = values.quantile(0.25)
+        q3 = values.quantile(0.75)
+        iqr = q3 - q1
+        if iqr == 0:
+            continue
+        lower = q1 - 1.5 * iqr
+        upper = q3 + 1.5 * iqr
+        count = int(((values < lower) | (values > upper)).sum())
+        if count:
+            warnings.append({"column": column, "count": count, "message": f"{format_number(count)} unusual values detected in {column}."})
+    return warnings
+
+
+def detect_inconsistent_values(df: pd.DataFrame, categorical_columns: list[str]) -> list[dict[str, Any]]:
+    warnings: list[dict[str, Any]] = []
+    for column in categorical_columns[:8]:
+        values = df[column].dropna().astype(str).str.strip()
+        if values.empty:
+            continue
+        normalized = values.str.lower().str.replace(r"[^a-z0-9]+", " ", regex=True).str.strip()
+        duplicates = values.groupby(normalized).nunique()
+        inconsistent_count = int((duplicates > 1).sum())
+        if inconsistent_count:
+            warnings.append(
+                {
+                    "column": column,
+                    "count": inconsistent_count,
+                    "message": f"{format_number(inconsistent_count)} groups may have inconsistent spelling or casing in {column}.",
+                }
+            )
+    return warnings
+
+
+def health_severity(score: int) -> str:
+    if score >= 90:
+        return "Excellent"
+    if score >= 78:
+        return "Good"
+    if score >= 62:
+        return "Moderate"
+    if score >= 45:
+        return "Risky"
+    return "Critical"
+
+
+def infer_business_mode(mode: str, mappings: dict[str, str | None]) -> str:
+    lowered = mode.lower()
+    if "inventory" in lowered or mappings.get("stock"):
+        return "inventory"
+    if "expense" in lowered or "finance" in lowered:
+        return "finance"
+    if "sales" in lowered or mappings.get("amount"):
+        return "sales"
+    if "customer" in lowered or mappings.get("customer"):
+        return "e-commerce"
+    if "survey" in lowered:
+        return "survey"
+    return "general"
+
+
+def business_grade(score: int) -> str:
+    if score >= 88:
+        return "A"
+    if score >= 75:
+        return "B"
+    if score >= 62:
+        return "C"
+    if score >= 48:
+        return "D"
+    return "Needs urgent review"
+
+
+def revenue_trend_signal(df: pd.DataFrame, date_col: str | None, amount: pd.Series | None) -> dict[str, Any] | None:
+    if not date_col or date_col not in df.columns or amount is None:
+        return None
+    working = pd.DataFrame({"date": pd.to_datetime(df[date_col], errors="coerce", dayfirst=True), "amount": amount})
+    grouped = working.dropna().assign(month=lambda frame: frame["date"].dt.to_period("M").astype(str)).groupby("month")["amount"].sum()
+    if len(grouped) < 2:
+        return None
+    first = float(grouped.iloc[0])
+    last = float(grouped.iloc[-1])
+    if last >= first:
+        return {"score_delta": 5, "message": "Revenue trend is stable or improving across detected months.", "action": "Keep tracking month-wise performance and protect the strongest sales drivers."}
+    return {"score_delta": -9, "message": "Revenue trend appears to decline across detected months.", "action": "Review pricing, channels, product mix, and demand changes behind the decline."}
+
+
+def concentration_signal(df: pd.DataFrame, group_col: str | None, amount: pd.Series | None, label: str = "product/category") -> dict[str, Any] | None:
+    if not group_col or group_col not in df.columns or amount is None or float(amount.sum()) <= 0:
+        return None
+    grouped = df.assign(_value=amount).dropna(subset=["_value"]).groupby(group_col)["_value"].sum().sort_values(ascending=False)
+    if grouped.empty:
+        return None
+    share = float(grouped.iloc[0] / max(grouped.sum(), 1) * 100)
+    top_name = str(grouped.index[0])
+    if share >= 55:
+        return {
+            "score_delta": -10,
+            "message": f"High concentration risk: top {label} {top_name} contributes {safe_round(share)}% of detected value.",
+            "action": f"Reduce dependency on one {label} by improving secondary products, categories, or segments.",
+        }
+    return {
+        "score_delta": 4,
+        "message": f"Top {label} contributes {safe_round(share)}%, which looks reasonably diversified.",
+        "action": f"Continue monitoring top {label} share over time.",
+    }
+
+
+def best_worst_month(df: pd.DataFrame, date_col: str, amount_col: str) -> dict[str, Any] | None:
+    if date_col not in df.columns or amount_col not in df.columns:
+        return None
+    working = df[[date_col, amount_col]].copy()
+    working[date_col] = pd.to_datetime(working[date_col], errors="coerce", dayfirst=True)
+    working[amount_col] = pd.to_numeric(working[amount_col], errors="coerce")
+    grouped = working.dropna().assign(month=lambda frame: frame[date_col].dt.to_period("M").astype(str)).groupby("month")[amount_col].sum()
+    if grouped.empty:
+        return None
+    return {
+        "best_month": str(grouped.idxmax()),
+        "best_value": float(grouped.max()),
+        "worst_month": str(grouped.idxmin()),
+        "worst_value": float(grouped.min()),
+    }
+
+
+def explain_charts(charts: list[dict[str, Any]], detected: DetectedColumns) -> list[dict[str, str]]:
+    explanations = []
+    for chart in charts:
+        chart_id = chart["id"]
+        title = chart["title"]
+        if "missing" in chart_id:
+            reason = "Shows which columns need cleanup before reporting."
+        elif "monthly" in chart_id:
+            reason = "Shows trend direction over time for the strongest date and numeric columns."
+        elif "correlation" in chart_id:
+            reason = "Shows how numeric columns move together and where relationships may exist."
+        elif "distribution" in chart_id:
+            reason = "Shows the spread of numeric values and helps spot unusual ranges."
+        else:
+            reason = "Shows the largest categories or repeated values for quick segmentation."
+        explanations.append({"id": chart_id, "title": title, "reason": reason})
+    return explanations
+
+
+def recommended_chart_strategy(detected: DetectedColumns) -> list[str]:
+    strategy = ["Missing values chart for data quality."]
+    if detected.date and detected.numeric:
+        strategy.append("Line chart for date plus numeric trends.")
+    if detected.categorical and detected.numeric:
+        strategy.append("Bar chart for category plus numeric top-N breakdowns.")
+    if detected.categorical:
+        strategy.append("Distribution chart for category concentration.")
+    if detected.numeric:
+        strategy.append("Histogram for numeric spread and outliers.")
+    if len(detected.numeric) >= 2:
+        strategy.append("Correlation heatmap for numeric relationships.")
+    return strategy
+
+
+def limited_diagnosis(diagnosis: dict[str, Any]) -> dict[str, Any]:
+    limited = dict(diagnosis)
+    limited["prescription"] = diagnosis["prescription"][:2]
+    limited["risks"] = diagnosis["risks"][:2]
+    limited["outlier_warnings"] = diagnosis["outlier_warnings"][:2]
+    limited["inconsistent_values"] = diagnosis["inconsistent_values"][:2]
+    limited["is_limited"] = True
+    return limited
+
+
+def limited_consultant_report(report: dict[str, Any]) -> dict[str, Any]:
+    limited = dict(report)
+    for key in ["executive_summary", "key_findings", "risks", "opportunities", "recommended_actions", "data_quality_notes"]:
+        limited[key] = report.get(key, [])[:2]
+    limited["chart_explanations"] = report.get("chart_explanations", [])[:2]
+    limited["next_30_day_action_plan"] = report.get("next_30_day_action_plan", [])[:2]
+    limited["is_limited"] = True
+    return limited
+
+
+def build_feature_access(is_full_report: bool) -> dict[str, Any]:
+    return {
+        "is_full_report": is_full_report,
+        "free": {
+            "basic_kpis": True,
+            "short_diagnosis": True,
+            "limited_charts": True,
+            "short_ai_consultant_summary": True,
+        },
+        "paid": {
+            "full_diagnosis": is_full_report,
+            "full_smart_dashboard": is_full_report,
+            "full_ai_consultant_report": is_full_report,
+            "full_premium_pdf": is_full_report,
+            "full_action_plan": is_full_report,
+        },
+        "upgrade_message": "Unlock full AI consultant report with 1 report credit.",
+    }
+
+
+def dedupe_strings(items: list[str]) -> list[str]:
+    seen: set[str] = set()
+    output: list[str] = []
+    for item in items:
+        clean = str(item).strip()
+        if clean and clean not in seen:
+            seen.add(clean)
+            output.append(clean)
+    return output
 
 
 def numeric_variance_metric(df: pd.DataFrame) -> dict[str, str] | None:

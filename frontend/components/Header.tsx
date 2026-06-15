@@ -31,7 +31,8 @@ export function Header() {
         <span className="brand-mark">
           <img src="/logo-mark.svg" alt="" aria-hidden="true" />
         </span>
-        <span>{site.name}</span>
+        <img className="brand-wide" src="/branding/logo-wide.png" alt={site.name} />
+        <span className="brand-text">{site.name}</span>
       </Link>
       <nav className="desktop-nav" aria-label="Main navigation">
         {nav.map((item) => (

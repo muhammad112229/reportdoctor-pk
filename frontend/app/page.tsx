@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
   ArrowRight,
   BookOpen,
@@ -104,26 +105,15 @@ export default function HomePage() {
             <span>English + Roman Urdu</span>
           </div>
         </div>
-        <div className="hero-product" aria-hidden="true">
-          <div className="product-window">
-            <div className="product-window-top"><span /><span /><span /></div>
-            <div className="product-panel">
-              <div>
-                <span>Available credit</span>
-                <strong>3</strong>
-              </div>
-              <div>
-                <span>Missing cells</span>
-                <strong>1</strong>
-              </div>
-              <div>
-                <span>Duplicate rows</span>
-                <strong>0</strong>
-              </div>
-            </div>
-            <div className="product-chart"><span /><span /><span /><span /><span /></div>
-            <div className="product-lines"><span /><span /><span /></div>
-          </div>
+        <div className="hero-product">
+          <Image
+            src="/branding/hero-cover.png"
+            alt="ReportDoctor AI Data Consultant dashboard for Excel and CSV reports"
+            width={1680}
+            height={900}
+            priority
+            sizes="(max-width: 980px) 100vw, 48vw"
+          />
         </div>
       </section>
 
