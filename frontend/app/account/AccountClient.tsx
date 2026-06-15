@@ -42,7 +42,7 @@ export function AccountClient() {
           id: session.user.id,
           full_name: fullName.trim(),
           email: session.user.email || profile?.email || null,
-          whatsapp: whatsapp.trim(),
+          whatsapp: whatsapp.trim() || null,
           role: profile?.role || "user"
         },
         { onConflict: "id" }
@@ -95,8 +95,15 @@ export function AccountClient() {
               <input id="email" value={session.user.email || ""} disabled readOnly />
             </div>
             <div className="field">
-              <label htmlFor="whatsapp">WhatsApp number</label>
-              <input id="whatsapp" value={whatsapp} onChange={(event) => setWhatsapp(event.target.value)} required />
+              <label htmlFor="whatsapp">WhatsApp number (optional)</label>
+              <input
+                id="whatsapp"
+                type="tel"
+                autoComplete="tel"
+                value={whatsapp}
+                onChange={(event) => setWhatsapp(event.target.value)}
+                placeholder="923100906678"
+              />
             </div>
             {status ? <div className="status-box">{status}</div> : null}
             {error ? <div className="status-box error">{error}</div> : null}

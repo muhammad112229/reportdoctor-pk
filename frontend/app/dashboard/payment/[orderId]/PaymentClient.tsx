@@ -8,6 +8,7 @@ import { useAuth } from "@/components/AuthProvider";
 import type { Order } from "@/lib/accountTypes";
 import { fetchJson } from "@/lib/api";
 import { paymentOptions } from "@/lib/site";
+import { supabase } from "@/lib/supabase";
 
 type OrderResponse = {
   order: Order;
@@ -16,8 +17,9 @@ type OrderResponse = {
 export function PaymentClient() {
   const params = useParams<{ orderId: string }>();
   const router = useRouter();
-  const { session, loading } = useAuth();
+  const { session, loading, profile, refreshAccountData } = useAuth();
   const [order, setOrder] = useState<Order | null>(null);
+  const [followUpWhatsApp, setFollowUpWhatsApp] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [status, setStatus] = useState<string | null>(null);
   const [fetching, setFetching] = useState(true);
@@ -38,6 +40,10 @@ export function PaymentClient() {
       .finally(() => setFetching(false));
   }, [loading, params.orderId, router, session]);
 
+  useEffect(() => {
+    setFollowUpWhatsApp(profile?.whatsapp || "");
+  }, [profile?.whatsapp]);
+
   async function markSent() {
     if (!session || !order) {
       return;
@@ -48,6 +54,24 @@ export function PaymentClient() {
     try {
       const data = await fetchJson<OrderResponse>(`/orders/${order.id}/sent`, session, { method: "POST" });
       setOrder(data.order);
+      const cleanWhatsApp = followUpWhatsApp.trim();
+      if (cleanWhatsApp) {
+        const { error: profileError } = await supabase.from("profiles").upsert(
+          {
+            id: session.user.id,
+            full_name: profile?.full_name || session.user.user_metadata?.full_name || null,
+            email: session.user.email || profile?.email || null,
+            whatsapp: cleanWhatsApp,
+            role: profile?.role || "user"
+          },
+          { onConflict: "id" }
+        );
+        if (profileError) {
+          setStatus("Payment screenshot note saved, but WhatsApp follow-up number could not be saved.");
+          return;
+        }
+        await refreshAccountData();
+      }
       setStatus("Payment screenshot note saved. Admin approval ke baad report credit activate ho jayega.");
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Could not update the order.");
@@ -99,7 +123,19 @@ export function PaymentClient() {
             <div><span>Selected plan</span><strong>{order.plan?.name || order.plan_id}</strong></div>
             <div><span>Amount</span><strong>Rs. {order.amount_pkr.toLocaleString()}</strong></div>
             <div><span>Easypaisa number</span><strong>{paymentOptions.easypaisa}</strong></div>
+            <div><span>Payment/support WhatsApp</span><strong>+{paymentOptions.whatsapp}</strong></div>
             <div><span>Order status</span><strong>{order.status}</strong></div>
+          </div>
+          <div className="field">
+            <label htmlFor="payment-followup-whatsapp">Your WhatsApp number for payment follow-up (optional)</label>
+            <input
+              id="payment-followup-whatsapp"
+              type="tel"
+              autoComplete="tel"
+              value={followUpWhatsApp}
+              onChange={(event) => setFollowUpWhatsApp(event.target.value)}
+              placeholder="923100906678"
+            />
           </div>
           {status ? <div className="status-box">{status}</div> : null}
           {error ? <div className="status-box error">{error}</div> : null}

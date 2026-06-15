@@ -28,13 +28,14 @@ export function SignUpForm() {
       requireSupabaseConfig();
       logSafeSupabaseDiagnostics("signup:start");
       const cleanEmail = email.trim();
+      const cleanWhatsApp = whatsapp.trim() || null;
       const { data, error: signUpError } = await supabase.auth.signUp({
         email: cleanEmail,
         password,
         options: {
           data: {
             full_name: fullName.trim(),
-            whatsapp: whatsapp.trim()
+            ...(cleanWhatsApp ? { whatsapp: cleanWhatsApp } : {})
           }
         }
       });
@@ -49,7 +50,7 @@ export function SignUpForm() {
             id: data.user.id,
             full_name: fullName.trim(),
             email: cleanEmail,
-            whatsapp: whatsapp.trim(),
+            whatsapp: cleanWhatsApp,
             role: "user"
           },
           { onConflict: "id" }
@@ -103,7 +104,7 @@ export function SignUpForm() {
             />
           </div>
           <div className="field">
-            <label htmlFor="whatsapp">WhatsApp number</label>
+            <label htmlFor="whatsapp">WhatsApp number (optional)</label>
             <input
               id="whatsapp"
               type="tel"
@@ -111,7 +112,6 @@ export function SignUpForm() {
               value={whatsapp}
               onChange={(event) => setWhatsapp(event.target.value)}
               placeholder="03XXXXXXXXX"
-              required
             />
           </div>
           <div className="field">

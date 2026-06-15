@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { BarChart3, CreditCard, FileText, Loader2, MessageCircle, PlusCircle, ScanLine } from "lucide-react";
+import { CreditCard, Loader2, MessageCircle, PlusCircle, ScanLine } from "lucide-react";
 import { useAuth } from "@/components/AuthProvider";
 import type { AccountSummary } from "@/lib/accountTypes";
 import { fetchJson } from "@/lib/api";
@@ -109,7 +109,7 @@ export function DashboardClient() {
             <div className="detail-list">
               <div><span>Name</span><strong>{activeProfile?.full_name || "Not added"}</strong></div>
               <div><span>Email</span><strong>{activeProfile?.email || session.user.email}</strong></div>
-              <div><span>WhatsApp</span><strong>{activeProfile?.whatsapp || "Not added"}</strong></div>
+              <div><span>WhatsApp</span><strong>{activeProfile?.whatsapp || "WhatsApp not added"}</strong></div>
             </div>
             <div className="card-footer">
               <Link className="button secondary" href="/account">Edit account</Link>

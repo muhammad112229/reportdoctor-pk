@@ -105,7 +105,7 @@ export function AdminOrdersClient() {
                       <strong>{order.profile?.full_name || "No name"}</strong>
                       <span className="table-subtext">{order.profile?.email || order.user_id}</span>
                     </td>
-                    <td>{order.profile?.whatsapp || "Not added"}</td>
+                    <td>{order.profile?.whatsapp || "Not provided"}</td>
                     <td>{order.plan?.name || order.plan_id}</td>
                     <td>Rs. {order.amount_pkr.toLocaleString()}</td>
                     <td><span className="status-pill">{order.status}</span></td>
