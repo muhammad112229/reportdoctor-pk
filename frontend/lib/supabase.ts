@@ -69,6 +69,14 @@ export function getSafeAuthErrorMessage(caught: unknown, action: "signup" | "sig
     : "Could not sign in. Please try again.";
 }
 
+export function getSupabaseAuthHealthUrl() {
+  if (!supabaseUrl) {
+    return null;
+  }
+
+  return `${supabaseUrl.replace(/\/$/, "")}/auth/v1/health`;
+}
+
 function getSupabaseUrlHost() {
   if (!supabaseUrl) {
     return null;

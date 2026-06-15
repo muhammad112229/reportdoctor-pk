@@ -2,7 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
-import { getSafeAuthErrorMessage, getSupabaseDiagnostics, logSafeSupabaseDiagnostics, supabase } from "@/lib/supabase";
+import {
+  getSafeAuthErrorMessage,
+  getSupabaseAuthHealthUrl,
+  getSupabaseDiagnostics,
+  logSafeSupabaseDiagnostics,
+  supabase
+} from "@/lib/supabase";
 
 type SessionStatus = {
   state: "loading" | "success" | "error";
@@ -30,7 +36,7 @@ export function AuthDebugClient() {
 
     supabase.auth
       .getSession()
-      .then(({ error }) => {
+      .then(async ({ error }) => {
         if (!active) {
           return;
         }
@@ -38,6 +44,26 @@ export function AuthDebugClient() {
           setSessionStatus({ state: "error", message: error.message });
           return;
         }
+
+        const healthUrl = getSupabaseAuthHealthUrl();
+        if (!healthUrl) {
+          setSessionStatus({ state: "error", message: "Supabase public config missing." });
+          return;
+        }
+
+        try {
+          await fetch(healthUrl, { method: "GET", cache: "no-store" });
+        } catch (caught) {
+          if (!active) {
+            return;
+          }
+          setSessionStatus({
+            state: "error",
+            message: `error: auth API unreachable (${caught instanceof Error ? caught.message : "network failure"})`
+          });
+          return;
+        }
+
         setSessionStatus({ state: "success", message: "success" });
       })
       .catch((caught) => {
