@@ -6,14 +6,16 @@ from io import BytesIO
 from pathlib import Path
 from time import monotonic
 
-from fastapi import FastAPI, File, Form, HTTPException, UploadFile
+from fastapi import FastAPI, File, Form, HTTPException, Request, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, StreamingResponse
+from pydantic import BaseModel, Field
 
 from app.config import settings
 from app.utils.analysis import build_analysis
 from app.utils.pdf import build_pdf_report
 from app.utils.reader import UploadValidationError, read_dataframe, validate_upload
+from app.utils.supabase_service import SupabaseServiceError, supabase_service
 
 app = FastAPI(
     title="ReportDoctor.pk API",
@@ -27,9 +29,18 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["X-Remaining-Credits"],
 )
 
 _rate_limit_buckets: dict[str, deque[float]] = defaultdict(deque)
+
+
+class CreateOrderRequest(BaseModel):
+    plan_id: str = Field(min_length=1)
+
+
+class RejectOrderRequest(BaseModel):
+    admin_note: str | None = None
 
 
 @app.middleware("http")
@@ -101,13 +112,22 @@ async def analyze(
 
 @app.post("/report/pdf")
 async def report_pdf(
+    request: Request,
     file: UploadFile = File(...),
     mode: str = Form("General Data"),
     beginner_mode: bool = Form(True),
     unlock_code: str | None = Form(None),
 ) -> StreamingResponse:
-    if not is_unlocked(unlock_code):
-        raise HTTPException(status_code=403, detail="Full PDF requires a valid paid report unlock code.")
+    legacy_unlock = is_unlocked(unlock_code)
+    credit_user = None
+    if not legacy_unlock:
+        try:
+            token = get_bearer_token(request)
+            credit_user = supabase_service.get_user(token)
+            if supabase_service.available_credits(credit_user["id"]) <= 0:
+                raise SupabaseServiceError(402, "No report credits available. Please buy a paid report plan first.")
+        except SupabaseServiceError as exc:
+            raise HTTPException(status_code=exc.status_code, detail=exc.detail) from exc
 
     contents = await file.read()
     try:
@@ -121,8 +141,18 @@ async def report_pdf(
             is_full_report=True,
         )
         pdf_bytes = build_pdf_report(analysis)
+        remaining_credits = None
+        if credit_user:
+            remaining_credits = supabase_service.consume_credit_and_save_report(
+                credit_user,
+                filename=file.filename or "uploaded-file",
+                mode=mode,
+                analysis=analysis,
+            )
     except UploadValidationError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
+    except SupabaseServiceError as exc:
+        raise HTTPException(status_code=exc.status_code, detail=exc.detail) from exc
     except Exception as exc:
         raise HTTPException(
             status_code=500,
@@ -130,12 +160,113 @@ async def report_pdf(
         ) from exc
 
     download_name = f"{Path(file.filename or 'report').stem}-reportdoctor-report.pdf"
+    headers = {"Content-Disposition": f'attachment; filename="{download_name}"'}
+    if remaining_credits is not None:
+        headers["X-Remaining-Credits"] = str(remaining_credits)
     return StreamingResponse(
         BytesIO(pdf_bytes),
         media_type="application/pdf",
-        headers={"Content-Disposition": f'attachment; filename="{download_name}"'},
+        headers=headers,
     )
+
+
+@app.get("/account/summary")
+def account_summary(request: Request) -> dict:
+    try:
+        user = supabase_service.get_user(get_bearer_token(request))
+        return supabase_service.account_summary(user)
+    except SupabaseServiceError as exc:
+        raise HTTPException(status_code=exc.status_code, detail=exc.detail) from exc
+
+
+@app.post("/orders")
+def create_order(payload: CreateOrderRequest, request: Request) -> dict:
+    try:
+        user = supabase_service.get_user(get_bearer_token(request))
+        return {"order": supabase_service.create_order(user, payload.plan_id)}
+    except SupabaseServiceError as exc:
+        raise HTTPException(status_code=exc.status_code, detail=exc.detail) from exc
+
+
+@app.get("/orders/{order_id}")
+def get_order(order_id: str, request: Request) -> dict:
+    try:
+        user = supabase_service.get_user(get_bearer_token(request))
+        return {"order": supabase_service.get_order_details(user["id"], order_id)}
+    except SupabaseServiceError as exc:
+        raise HTTPException(status_code=exc.status_code, detail=exc.detail) from exc
+
+
+@app.post("/orders/{order_id}/sent")
+def mark_order_sent(order_id: str, request: Request) -> dict:
+    try:
+        user = supabase_service.get_user(get_bearer_token(request))
+        return {"order": supabase_service.mark_order_sent(user["id"], order_id)}
+    except SupabaseServiceError as exc:
+        raise HTTPException(status_code=exc.status_code, detail=exc.detail) from exc
+
+
+@app.get("/admin/summary")
+def admin_summary(request: Request) -> dict:
+    try:
+        supabase_service.require_admin(get_bearer_token(request))
+        return supabase_service.admin_summary()
+    except SupabaseServiceError as exc:
+        raise HTTPException(status_code=exc.status_code, detail=exc.detail) from exc
+
+
+@app.get("/admin/orders")
+def admin_orders(request: Request, status: str | None = None) -> dict:
+    try:
+        supabase_service.require_admin(get_bearer_token(request))
+        return {"orders": supabase_service.admin_orders(status)}
+    except SupabaseServiceError as exc:
+        raise HTTPException(status_code=exc.status_code, detail=exc.detail) from exc
+
+
+@app.post("/admin/orders/{order_id}/approve")
+def approve_order(order_id: str, request: Request) -> dict:
+    try:
+        supabase_service.require_admin(get_bearer_token(request))
+        return {"order": supabase_service.approve_order(order_id)}
+    except SupabaseServiceError as exc:
+        raise HTTPException(status_code=exc.status_code, detail=exc.detail) from exc
+
+
+@app.post("/admin/orders/{order_id}/reject")
+def reject_order(order_id: str, payload: RejectOrderRequest, request: Request) -> dict:
+    try:
+        supabase_service.require_admin(get_bearer_token(request))
+        return {"order": supabase_service.reject_order(order_id, payload.admin_note)}
+    except SupabaseServiceError as exc:
+        raise HTTPException(status_code=exc.status_code, detail=exc.detail) from exc
+
+
+@app.get("/admin/users")
+def admin_users(request: Request) -> dict:
+    try:
+        supabase_service.require_admin(get_bearer_token(request))
+        return {"users": supabase_service.admin_users()}
+    except SupabaseServiceError as exc:
+        raise HTTPException(status_code=exc.status_code, detail=exc.detail) from exc
+
+
+@app.get("/admin/reports")
+def admin_reports(request: Request) -> dict:
+    try:
+        supabase_service.require_admin(get_bearer_token(request))
+        return {"reports": supabase_service.admin_reports()}
+    except SupabaseServiceError as exc:
+        raise HTTPException(status_code=exc.status_code, detail=exc.detail) from exc
 
 
 def is_unlocked(unlock_code: str | None) -> bool:
     return bool(unlock_code) and unlock_code == settings.report_unlock_code
+
+
+def get_bearer_token(request: Request) -> str:
+    authorization = request.headers.get("authorization", "")
+    scheme, _, token = authorization.partition(" ")
+    if scheme.lower() != "bearer" or not token:
+        raise SupabaseServiceError(401, "Please sign in to continue.")
+    return token.strip()

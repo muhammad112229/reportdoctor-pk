@@ -30,7 +30,7 @@ const page = await context.newPage();
 await page.goto("http://127.0.0.1:3000", { waitUntil: "domcontentloaded" });
 await expect(page.getByRole("heading", { name: "ReportDoctor.pk" })).toBeVisible();
 await page.waitForTimeout(1500);
-await page.getByRole("link", { name: /Generate Free Report/ }).click();
+await page.goto("http://127.0.0.1:3000/free-scan", { waitUntil: "domcontentloaded" });
 await expect(page).toHaveURL(/\/free-scan$/);
 
 await analyze(page, qualityCsv, "General Data", { missing: "1", duplicates: "1" });
@@ -38,18 +38,11 @@ await analyze(page, qualityCsv, "Sales Data", { missing: "1", duplicates: "1" })
 await analyze(page, salesXlsx, "Inventory Data", { missing: "0", duplicates: "0" });
 await analyze(page, qualityXlsx, "Survey Data", { missing: "1", duplicates: "1" });
 
-await page.fill("#unlock", "wrong-code");
-await page.getByRole("button", { name: /Download PDF|Generating/ }).click();
-await expect(page.getByText(/valid paid report unlock code/)).toBeVisible({ timeout: 60000 });
-
-await page.fill("#unlock", "demo123");
-const downloadPromise = page.waitForEvent("download", { timeout: 60000 });
-await page.getByRole("button", { name: /Download PDF|Generating/ }).click();
-const download = await downloadPromise;
-const suggested = download.suggestedFilename();
-if (!suggested.endsWith(".pdf")) {
-  throw new Error(`Expected PDF download, got ${suggested}`);
-}
+await expect(page.getByRole("button", { name: /Sign in to unlock PDF/ })).toBeDisabled();
+await page.goto("http://127.0.0.1:3000/pricing", { waitUntil: "domcontentloaded" });
+await page.getByRole("button", { name: /Request Full Report/ }).click();
+await expect(page).toHaveURL(/\/signin\?next=%2Fpricing|\/signin\?next=\/pricing/);
+await expect(page.getByRole("heading", { name: "Sign in" })).toBeVisible();
 
 await page.setViewportSize({ width: 390, height: 844 });
 await page.goto("http://127.0.0.1:3000/free-scan", { waitUntil: "domcontentloaded" });

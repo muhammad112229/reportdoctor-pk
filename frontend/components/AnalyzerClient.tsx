@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { FormEvent, useMemo, useState } from "react";
 import { Download, FileSpreadsheet, FileUp, Loader2, MessageCircle, RefreshCcw } from "lucide-react";
+import { useAuth } from "@/components/AuthProvider";
 import { PaymentBox } from "@/components/PaymentBox";
 import { paymentOptions } from "@/lib/site";
 
@@ -73,6 +74,7 @@ const MAX_UPLOAD_BYTES = MAX_UPLOAD_MB * 1024 * 1024;
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "";
 
 export function AnalyzerClient() {
+  const { session, profile, availableCredits, refreshAccountData } = useAuth();
   const [file, setFile] = useState<File | null>(null);
   const [mode, setMode] = useState("General Data");
   const [beginnerMode, setBeginnerMode] = useState(true);
@@ -83,8 +85,12 @@ export function AnalyzerClient() {
   const [loading, setLoading] = useState(false);
   const [pdfLoading, setPdfLoading] = useState(false);
 
-  const canDownloadPdf = useMemo(() => Boolean(file && unlockCode.trim()), [file, unlockCode]);
+  const canDownloadPdf = useMemo(
+    () => Boolean(file && (unlockCode.trim() || (session && availableCredits > 0))),
+    [availableCredits, file, session, unlockCode]
+  );
   const whatsappUrl = `https://wa.me/${paymentOptions.whatsapp}`;
+  const showAdminUnlock = profile?.role === "admin";
 
   async function runAnalysis(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -152,12 +158,28 @@ export function AnalyzerClient() {
     formData.append("file", file);
     formData.append("mode", mode);
     formData.append("beginner_mode", String(beginnerMode));
-    formData.append("unlock_code", unlockCode.trim());
+    if (unlockCode.trim()) {
+      formData.append("unlock_code", unlockCode.trim());
+    }
+
+    if (!session && !unlockCode.trim()) {
+      setError("Please sign in and use an available report credit to download the full PDF.");
+      return;
+    }
+    if (session && availableCredits <= 0 && !unlockCode.trim()) {
+      setError("No report credits available. Please buy a paid report plan first.");
+      return;
+    }
 
     setPdfLoading(true);
     try {
+      const headers = new Headers();
+      if (session?.access_token) {
+        headers.set("Authorization", `Bearer ${session.access_token}`);
+      }
       const response = await fetch(`${API_BASE}/report/pdf`, {
         method: "POST",
+        headers,
         body: formData
       });
       if (!response.ok) {
@@ -173,7 +195,13 @@ export function AnalyzerClient() {
       link.click();
       link.remove();
       URL.revokeObjectURL(url);
-      setStatus("PDF generated successfully.");
+      const remainingCredits = response.headers.get("X-Remaining-Credits");
+      if (remainingCredits !== null) {
+        setStatus(`PDF generated successfully. Remaining report credits: ${remainingCredits}.`);
+        await refreshAccountData();
+      } else {
+        setStatus("PDF generated successfully.");
+      }
     } catch (caught) {
       setError(formatClientError(caught, "PDF service is offline. Please try again in a moment."));
     } finally {
@@ -234,16 +262,31 @@ export function AnalyzerClient() {
             Beginner Mode: column mapping aur simple guidance dikhayein
           </label>
 
-          <div className="field">
-            <label htmlFor="unlock">Paid report unlock code</label>
-            <input
-              id="unlock"
-              type="text"
-              value={unlockCode}
-              onChange={(event) => setUnlockCode(event.target.value)}
-              placeholder="Enter code after manual payment"
-            />
-          </div>
+          {showAdminUnlock ? (
+            <details className="admin-fallback">
+              <summary>Admin unlock-code fallback</summary>
+              <div className="field">
+                <label htmlFor="unlock">Paid report unlock code</label>
+                <input
+                  id="unlock"
+                  type="text"
+                  value={unlockCode}
+                  onChange={(event) => setUnlockCode(event.target.value)}
+                  placeholder="Enter admin fallback code"
+                />
+              </div>
+            </details>
+          ) : null}
+
+          {session ? (
+            <div className="status-box">
+              Available report credits: {availableCredits}. PDF download consumes 1 credit.
+            </div>
+          ) : (
+            <div className="status-box">
+              Free Scan works without login. Sign in and buy credits to download full PDFs.
+            </div>
+          )}
 
           <div className="form-actions">
             <button className="button primary" type="submit" disabled={loading}>
@@ -257,7 +300,7 @@ export function AnalyzerClient() {
               disabled={!canDownloadPdf || pdfLoading}
             >
               {pdfLoading ? <Loader2 className="spin" size={18} aria-hidden="true" /> : <Download size={18} aria-hidden="true" />}
-              {pdfLoading ? "Generating" : "Download PDF"}
+              {pdfLoading ? "Generating" : pdfButtonLabel(Boolean(session), availableCredits, Boolean(unlockCode.trim()))}
             </button>
             <button
               className="button ghost"
@@ -437,7 +480,8 @@ export function AnalyzerClient() {
                 <p className="eyebrow">Locked in free scan</p>
                 <h2>Full report includes</h2>
                 <p className="section-intro">
-                  Full PDF report chahiye? Easypaisa payment karein aur WhatsApp par screenshot bhejein.
+                  Full PDF report chahiye? Pricing page se plan choose karein, Easypaisa payment karein, aur WhatsApp
+                  par screenshot bhejein.
                 </p>
                 <ul className="insight-list">
                   {result.locked_features.map((item) => (
@@ -445,8 +489,8 @@ export function AnalyzerClient() {
                   ))}
                 </ul>
                 <div className="hero-actions">
-                  <a className="button primary" href="#payment-options">
-                    Request Full Report
+                  <a className="button primary" href="/pricing">
+                    Buy Report Credits
                   </a>
                   <a className="button secondary" href={whatsappUrl} target="_blank" rel="noreferrer">
                     <MessageCircle size={18} aria-hidden="true" />
@@ -461,6 +505,19 @@ export function AnalyzerClient() {
       ) : null}
     </div>
   );
+}
+
+function pdfButtonLabel(isSignedIn: boolean, credits: number, hasUnlockCode: boolean) {
+  if (hasUnlockCode) {
+    return "Download PDF";
+  }
+  if (isSignedIn && credits > 0) {
+    return "Download PDF (use 1 credit)";
+  }
+  if (isSignedIn) {
+    return "No credits available";
+  }
+  return "Sign in to unlock PDF";
 }
 
 function formatClientError(caught: unknown, fallback: string) {

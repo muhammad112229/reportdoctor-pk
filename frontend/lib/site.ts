@@ -294,32 +294,48 @@ export const templates = [
 
 export const pricingTiers = [
   {
+    id: "free-scan",
     name: "Free Scan",
     price: "Rs. 0",
+    amountPkr: 0,
+    credits: 0,
     description: "Quick data quality and summary preview for beginners.",
     features: ["Upload CSV or Excel", "Dataset shape and columns", "Missing and duplicate checks", "2 charts", "Limited insights"],
-    action: "Start Free Scan"
+    action: "Start Free Scan",
+    isPaid: false
   },
   {
+    id: "basic-pdf",
     name: "Basic PDF Report",
     price: "Rs. 300",
+    amountPkr: 300,
+    credits: 1,
     description: "A clean PDF report for simple files and quick sharing.",
     features: ["Full PDF download", "Data quality summary", "Missing and duplicate checks", "Basic charts", "Plain English insights"],
-    action: "Request Full Report"
+    action: "Request Full Report",
+    isPaid: true
   },
   {
+    id: "business-report",
     name: "Business Report",
     price: "Rs. 700",
+    amountPkr: 700,
+    credits: 3,
     description: "A deeper report for shops, sellers, academies, clinics, and NGOs.",
     features: ["Business mode analysis", "English and Roman Urdu insights", "Recommendations", "More detailed charts", "WhatsApp verification"],
-    action: "Request Business Report"
+    action: "Request Business Report",
+    isPaid: true
   },
   {
+    id: "pro-report",
     name: "Pro Report",
     price: "Rs. 1,500",
+    amountPkr: 1500,
+    credits: 7,
     description: "Best for important files that need a polished report and careful review.",
     features: ["Full report package", "Priority manual verification", "PDF report workflow", "Template guidance", "Follow-up support on WhatsApp"],
-    action: "Contact Us"
+    action: "Contact Us",
+    isPaid: true
   }
 ];
 

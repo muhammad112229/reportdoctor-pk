@@ -21,6 +21,9 @@ class Settings:
         self.rate_limit_window_seconds = int(os.getenv("RATE_LIMIT_WINDOW_SECONDS", "60"))
         self.report_unlock_code = os.getenv("PAID_UNLOCK_CODE", "demo123")
         self.contact_email = os.getenv("CONTACT_EMAIL", "hello@reportdoctor.pk")
+        self.supabase_url = os.getenv("SUPABASE_URL", "").rstrip("/")
+        self.supabase_service_role_key = os.getenv("SUPABASE_SERVICE_ROLE_KEY", "")
+        self.easypaisa_number = os.getenv("EASYPAISA_NUMBER", "03100906678")
 
     @property
     def max_upload_bytes(self) -> int:

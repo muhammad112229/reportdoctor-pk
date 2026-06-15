@@ -88,6 +88,36 @@ as $$
   );
 $$;
 
+create or replace function public.handle_new_user()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  insert into public.profiles (id, full_name, email, whatsapp, role)
+  values (
+    new.id,
+    new.raw_user_meta_data ->> 'full_name',
+    new.email,
+    new.raw_user_meta_data ->> 'whatsapp',
+    'user'
+  )
+  on conflict (id) do update set
+    email = excluded.email,
+    full_name = coalesce(public.profiles.full_name, excluded.full_name),
+    whatsapp = coalesce(public.profiles.whatsapp, excluded.whatsapp);
+
+  return new;
+end;
+$$;
+
+drop trigger if exists on_auth_user_created on auth.users;
+
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute function public.handle_new_user();
+
 alter table public.profiles enable row level security;
 alter table public.plans enable row level security;
 alter table public.orders enable row level security;

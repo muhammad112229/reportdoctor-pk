@@ -14,10 +14,10 @@ export function PaymentBox() {
       <p className="eyebrow">Paid report MVP</p>
       <h2>Full PDF report option</h2>
       <p>
-        Full PDF report chahiye? Easypaisa payment karein aur WhatsApp par screenshot bhejein.
+        Full PDF report chahiye? Paid plan choose karein, Easypaisa payment karein, aur WhatsApp par screenshot bhejein.
       </p>
       <p className="muted">
-        Payment ke baad screenshot WhatsApp par bhejein. Verification ke baad full report unlock code diya jayega.
+        Payment ke baad screenshot WhatsApp par bhejein. Admin approval ke baad report credit automatically activate ho jayega.
       </p>
       <div className="feature-list">
         <div className="feature-row">
@@ -46,11 +46,14 @@ export function PaymentBox() {
         </div>
       </div>
       <div className="hero-actions">
-        <a className="button primary" href={whatsappUrl} target="_blank" rel="noreferrer">
+        <a className="button primary" href="/pricing">
+          Buy Report Credits
+        </a>
+        <a className="button secondary" href={whatsappUrl} target="_blank" rel="noreferrer">
           <MessageCircle size={18} aria-hidden="true" />
           Send Payment Screenshot
         </a>
-        <a className="button secondary" href={`mailto:${email}?subject=ReportDoctor.pk full report request`}>
+        <a className="button ghost" href={`mailto:${email}?subject=ReportDoctor.pk full report request`}>
           <Mail size={18} aria-hidden="true" />
           Email payment proof
         </a>
@@ -60,7 +63,7 @@ export function PaymentBox() {
         <input id="payment-proof" type="file" accept="image/*,.pdf" />
       </div>
       <p className="muted">
-        <Upload size={16} aria-hidden="true" /> Screenshot bhejein, unlock code hasil karein, phir full PDF download karein.
+        <Upload size={16} aria-hidden="true" /> Screenshot bhejein, approval ka wait karein, phir credit se full PDF download karein.
       </p>
     </section>
   );
