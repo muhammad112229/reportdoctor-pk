@@ -1866,9 +1866,8 @@ tbody tr:last-child td {
   position: relative;
   overflow: hidden;
   background:
-    radial-gradient(circle at 78% 24%, rgba(20, 184, 166, 0.2), transparent 34%),
-    linear-gradient(135deg, rgba(7, 26, 47, 0.94) 0%, rgba(11, 38, 61, 0.9) 44%, rgba(15, 118, 110, 0.74) 120%),
-    url("/branding/hero-cover.png") center/cover;
+    radial-gradient(circle at 78% 24%, rgba(20, 184, 166, 0.18), transparent 34%),
+    linear-gradient(135deg, #071a2f 0%, #0b263d 48%, #0f766e 130%);
   color: #fff;
 }
 
@@ -1877,21 +1876,34 @@ tbody tr:last-child td {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(90deg, rgba(7, 26, 47, 0.98) 0%, rgba(7, 26, 47, 0.84) 38%, rgba(7, 26, 47, 0.26) 100%);
+    linear-gradient(90deg, rgba(7, 26, 47, 0.96) 0%, rgba(7, 26, 47, 0.72) 46%, rgba(7, 26, 47, 0.1) 100%);
   pointer-events: none;
+  z-index: 1;
+}
+
+.hero-cover-media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.72;
+}
+
+.hero-cover-image {
+  object-fit: cover;
+  object-position: center right;
 }
 
 .hero-inner,
 .hero-product {
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
 .hero-inner {
   padding: clamp(20px, 3vw, 30px);
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 8px;
-  background: rgba(7, 26, 47, 0.42);
+  background: rgba(7, 26, 47, 0.62);
   box-shadow: 0 24px 70px rgba(0, 0, 0, 0.22);
   backdrop-filter: blur(12px);
 }
@@ -1909,7 +1921,8 @@ tbody tr:last-child td {
 }
 
 .hero-product {
-  width: min(100%, 760px);
+  justify-self: stretch;
+  width: min(100%, 820px);
 }
 
 .hero-product img {
@@ -1918,7 +1931,8 @@ tbody tr:last-child td {
   height: auto;
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
-  box-shadow: 0 34px 90px rgba(0, 0, 0, 0.36);
+  background: rgba(7, 26, 47, 0.24);
+  box-shadow: 0 34px 90px rgba(0, 0, 0, 0.42);
 }
 
 .premium-tabs {
@@ -2130,11 +2144,15 @@ tbody tr:last-child td {
   }
 
   .hero::before {
-    background: linear-gradient(180deg, rgba(7, 26, 47, 0.94), rgba(7, 26, 47, 0.62));
+    background: linear-gradient(180deg, rgba(7, 26, 47, 0.94), rgba(7, 26, 47, 0.48));
+  }
+
+  .hero-cover-media {
+    opacity: 0.58;
   }
 
   .hero-inner {
-    background: rgba(7, 26, 47, 0.56);
+    background: rgba(7, 26, 47, 0.68);
   }
 
   .premium-tabs {

@@ -82,27 +82,35 @@ export default function HomePage() {
   return (
     <>
       <section className="hero">
+        <div className="hero-cover-media" aria-hidden="true">
+          <Image
+            src="/branding/hero-cover.png"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="hero-cover-image"
+          />
+        </div>
         <div className="hero-inner">
           <p className="eyebrow">AI Data Consultant for Excel and CSV Reports</p>
-          <h1>Turn spreadsheets into dashboards, diagnosis, insights, and client-ready PDF reports</h1>
+          <h1>AI Data Consultant for Excel and CSV Reports</h1>
           <p>
-            Upload Excel or CSV files and get Data Doctor Diagnosis, Business Health Score, smart dashboards, charts,
-            and an Ask My Data assistant before unlocking a polished consultant-grade PDF.
+            Upload your spreadsheet and get instant dashboards, data diagnosis, AI insights, and a client-ready PDF report.
           </p>
           <div className="hero-actions">
             <Link className="button primary" href="/free-scan">
               Start Free Scan
               <ArrowRight size={18} aria-hidden="true" />
             </Link>
-            <Link className="button secondary" href="/sample-reports">
-              View Sample Report
+            <Link className="button secondary" href="/pricing">
+              View Pricing
             </Link>
           </div>
           <div className="hero-proof">
-            <span>No signup for Free Scan</span>
-            <span>Data Doctor Diagnosis</span>
-            <span>Ask My Data</span>
-            <span>Premium PDF</span>
+            <span>No signup needed for free scan</span>
+            <span>AI-style insights</span>
+            <span>Professional PDF reports</span>
           </div>
         </div>
         <div className="hero-product">
@@ -112,7 +120,7 @@ export default function HomePage() {
             width={1680}
             height={900}
             priority
-            sizes="(max-width: 980px) 100vw, 48vw"
+            sizes="(max-width: 980px) 100vw, 56vw"
           />
         </div>
       </section>

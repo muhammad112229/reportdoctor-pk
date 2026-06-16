@@ -30,7 +30,7 @@ const context = await browser.newContext({ acceptDownloads: true, viewport: { wi
 const page = await context.newPage();
 
 await page.goto("http://127.0.0.1:3000", { waitUntil: "domcontentloaded" });
-await expect(page.getByRole("heading", { name: "Turn spreadsheets into dashboards, diagnosis, insights, and client-ready PDF reports" })).toBeVisible();
+await expect(page.getByRole("heading", { name: "AI Data Consultant for Excel and CSV Reports" })).toBeVisible();
 await page.waitForTimeout(1500);
 await page.goto("http://127.0.0.1:3000/free-scan", { waitUntil: "domcontentloaded" });
 await expect(page).toHaveURL(/\/free-scan$/);
