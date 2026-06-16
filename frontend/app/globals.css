@@ -1866,8 +1866,9 @@ tbody tr:last-child td {
   position: relative;
   overflow: hidden;
   background:
-    radial-gradient(circle at 78% 24%, rgba(20, 184, 166, 0.18), transparent 34%),
-    linear-gradient(135deg, #071a2f 0%, #0b263d 44%, #0f766e 120%);
+    radial-gradient(circle at 78% 24%, rgba(20, 184, 166, 0.2), transparent 34%),
+    linear-gradient(135deg, rgba(7, 26, 47, 0.94) 0%, rgba(11, 38, 61, 0.9) 44%, rgba(15, 118, 110, 0.74) 120%),
+    url("/branding/hero-cover.png") center/cover;
   color: #fff;
 }
 

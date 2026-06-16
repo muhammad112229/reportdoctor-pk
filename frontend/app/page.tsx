@@ -84,11 +84,11 @@ export default function HomePage() {
     <>
       <section className="hero">
         <div className="hero-inner">
-          <p className="eyebrow">Data reports for Pakistani businesses</p>
-          <h1>Turn messy Excel files into client-ready reports</h1>
+          <p className="eyebrow">AI Data Consultant for Pakistani businesses</p>
+          <h1>Turn messy Excel files into premium consultant reports</h1>
           <p>
-            {site.tagline} Get a free spreadsheet scan with data quality checks, charts, and plain-language business
-            insights, then unlock a polished PDF when it is worth sharing.
+            {site.tagline} Get Data Doctor Diagnosis, Business Health Score, smart dashboards, charts, and an Ask My
+            Data assistant before unlocking a polished consultant-grade PDF.
           </p>
           <div className="hero-actions">
             <Link className="button primary" href="/free-scan">
@@ -101,8 +101,9 @@ export default function HomePage() {
           </div>
           <div className="hero-proof">
             <span>No signup for Free Scan</span>
-            <span>CSV, XLSX, XLS</span>
-            <span>English + Roman Urdu</span>
+            <span>Data Doctor Diagnosis</span>
+            <span>Ask My Data</span>
+            <span>Premium PDF</span>
           </div>
         </div>
         <div className="hero-product">
@@ -150,7 +151,7 @@ export default function HomePage() {
 
       <section className="section">
         <p className="eyebrow">What it does</p>
-        <h2>From spreadsheet to business report</h2>
+        <h2>From spreadsheet to AI-style data consultant</h2>
         <div className="card-grid">
           {[
             {
@@ -159,14 +160,14 @@ export default function HomePage() {
               text: "Use files from shops, Daraz, Google Forms, clinics, academies, NGOs, or manual ledgers."
             },
             {
-              icon: LineChart,
-              title: "Get charts and insights",
-              text: "See missing values, duplicates, summaries, trends, top products, inventory risks, and survey patterns."
+              icon: Stethoscope,
+              title: "Data Doctor Diagnosis",
+              text: "See health score, severity, missing values, duplicates, weak columns, outliers, and a practical cleanup prescription."
             },
             {
-              icon: Download,
-              title: "Download PDF report",
-              text: "Free scan is instant. Full PDF report is connected to a manual payment workflow for the MVP."
+              icon: LineChart,
+              title: "Smart dashboard builder",
+              text: "Get recommended KPIs, chart strategy, business health signals, and an Ask My Data assistant without a paid AI API."
             }
           ].map(({ icon: Icon, title, text }) => (
             <article className="card" key={title}>
@@ -184,8 +185,8 @@ export default function HomePage() {
           <h2>See the kind of report your file can produce</h2>
           <p className="section-intro">
             ReportDoctor.pk starts with a free scan so users can check the quality of their file before paying. The full PDF
-            report can include dataset summaries, missing value checks, duplicate row warnings, business metrics, charts,
-            plain English insights, Roman Urdu guidance, and a review disclaimer.
+            report can include an executive summary, KPI snapshot, Data Doctor Diagnosis, Business Health Score, chart
+            explanations, risks, opportunities, recommended actions, and a 30-day action plan.
           </p>
           <div className="hero-actions">
             <Link className="button primary" href="/sample-reports">
