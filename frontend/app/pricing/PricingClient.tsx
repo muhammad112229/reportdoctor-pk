@@ -40,7 +40,7 @@ export function PricingClient() {
       });
       router.push(`/dashboard/payment/${data.order.id}`);
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : "Could not create your payment order.");
+      setError(caught instanceof Error ? caught.message : "Could not create your payment order. Please try again or contact support.");
     } finally {
       setCreatingPlanId(null);
     }
@@ -55,6 +55,7 @@ export function PricingClient() {
             {tier.id === "business-report" ? <span className="recommendation-badge">Recommended</span> : null}
             <p className="eyebrow">{tier.name}</p>
             <h2>{tier.price}</h2>
+            {"note" in tier && tier.note ? <span className="table-subtext">{tier.note}</span> : null}
             <p>{tier.description}</p>
             <div className="badge-row">
               <span className="badge">{tier.credits} report credits</span>

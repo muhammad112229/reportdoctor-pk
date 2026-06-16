@@ -41,10 +41,9 @@ export function SEOLanding({ page }: { page: SeoLandingPage }) {
           manual ledger, or a monthly spreadsheet maintained by several people.
         </p>
         <p>
-          The free scan is a fast first review. It shows the dataset size, column profile, missing values, duplicate rows,
-          charts, plain English insights, and Roman Urdu guidance. If the report is useful, the user can request a full PDF
-          report through Easypaisa payment and WhatsApp screenshot verification. The unlock code workflow keeps the MVP
-          simple while still giving users a clear paid path.
+          The free scan is a fast first review. It shows the dataset size, column profile, Data Doctor Diagnosis, Smart
+          Dashboard recommendations, charts, and plain-language insights. If the report is useful, paid report credits
+          unlock the full PDF. Manual local payment support is available during launch, with international checkout coming soon.
         </p>
       </section>
 
@@ -73,14 +72,14 @@ export function SEOLanding({ page }: { page: SeoLandingPage }) {
 
       <section className="section">
         <p className="eyebrow">Workflow</p>
-        <h2>From uploaded file to PDF unlock code</h2>
+        <h2>From uploaded file to consultant PDF</h2>
         <div className="steps-grid">
           {[
             ["Upload Excel/CSV", "Choose a spreadsheet up to 10 MB and select the closest business mode."],
             ["Get free scan", "Review missing values, duplicate rows, charts, and beginner guidance."],
-            ["Pay for full PDF report", "Use Easypaisa when the free scan confirms the report is useful."],
-            ["Send screenshot on WhatsApp", "Share the payment screenshot so the report request can be verified."],
-            ["Receive unlock code", "Enter the private unlock code and download the full PDF report."]
+            ["Choose report credits", "Select a paid plan when the free scan confirms the report is useful."],
+            ["Use launch payment support", "Manual Easypaisa and WhatsApp verification are available while international checkout is prepared."],
+            ["Download full PDF", "Use an approved report credit to download the consultant-grade PDF report."]
           ].map(([title, text], index) => (
             <article className="step-card" key={title}>
               <span>{index + 1}</span>
@@ -106,10 +105,9 @@ export function SEOLanding({ page }: { page: SeoLandingPage }) {
           is clean, what the most important numbers mean, and whether a PDF report is worth purchasing.
         </p>
         <p>
-          The paid report flow is intentionally manual for launch. A user can run the free scan without signup, decide
-          whether the result is useful, pay through Easypaisa, send the screenshot on WhatsApp, and receive an unlock code.
-          That keeps the early product simple while the website builds trust, gathers feedback, and avoids forcing a full
-          payment gateway before the MVP is proven.
+          The paid report flow is intentionally simple for launch. A user can run the free scan without signup, decide
+          whether the result is useful, and use a report credit for the full PDF. Manual Easypaisa and WhatsApp verification
+          remain available as temporary local support while international checkout is prepared.
         </p>
       </section>
 
@@ -119,16 +117,17 @@ export function SEOLanding({ page }: { page: SeoLandingPage }) {
           <h2>Launch-safe expectations</h2>
           <p className="section-intro">
             No signup is required for the free scan. Files are processed for analysis only, but users should avoid uploading
-            highly sensitive personal, banking, medical, legal, or confidential files. Automatically generated reports are
-            useful starting points, not final professional advice.
+            highly sensitive personal, banking, medical, legal, or confidential files unless they are comfortable doing so.
+            Raw files are not sent to external AI by default. Automatically generated reports are analytical support, not
+            financial, legal, medical, tax, or accounting advice.
           </p>
         </div>
         <div className="feature-list">
           {[
             "No signup required for free scan",
             "Files are processed for analysis only",
-            "Do not upload highly sensitive files",
-            "Review reports before business decisions"
+            "Raw files are not sent to external AI by default",
+            "Review reports before professional decisions"
           ].map((item) => (
             <div className="feature-row" key={item}>
               <ShieldCheck size={18} aria-hidden="true" />

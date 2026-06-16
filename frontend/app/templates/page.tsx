@@ -42,14 +42,14 @@ export default function TemplatesPage() {
           <p className="eyebrow">Custom templates</p>
           <h2>Need a paid template or setup help?</h2>
           <p className="section-intro">
-            Keep payment manual for the MVP: collect requirements, share Easypaisa payment details, verify the screenshot
-            on WhatsApp, and deliver the customized CSV or Excel template after confirmation.
+            Template setup is available as a manual launch support service. International checkout is coming soon; local
+            Easypaisa and WhatsApp verification can be used while payment automation is prepared.
           </p>
         </div>
         <div className="result-panel payment-box">
           <h3>Template setup service</h3>
           <p className="muted">
-            Offer paid setup for Daraz exports, shop inventory, academy fee sheets, clinic records, NGO surveys, and monthly
+            Offer paid setup for ecommerce exports, retail inventory, academy fee sheets, clinic records, NGO surveys, and monthly
             business reports.
           </p>
           <div className="hero-actions">

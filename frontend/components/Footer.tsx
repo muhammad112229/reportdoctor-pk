@@ -7,8 +7,8 @@ export function Footer() {
       <div>
         <strong>{site.name}</strong>
         <p>{site.tagline}</p>
-        <p className="muted">Built for Pakistani small businesses, sellers, academies, clinics, NGOs, and researchers.</p>
-        <p className="muted">Reports are automatically generated and should be reviewed before business decisions.</p>
+        <p className="muted">Turn spreadsheets into dashboards, diagnosis, insights, and client-ready PDF reports.</p>
+        <p className="muted">Reports are analytical support and should be reviewed before financial, legal, or professional decisions.</p>
       </div>
       <div className="footer-grid">
         <div>

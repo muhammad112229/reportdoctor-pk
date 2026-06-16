@@ -1,9 +1,9 @@
 export const site = {
   name: "ReportDoctor.pk",
-  tagline: "Excel/CSV file upload karein, professional report hasil karein.",
+  tagline: "AI Data Consultant for Excel and CSV Reports.",
   description:
-    "ReportDoctor.pk helps Pakistani businesses turn Excel and CSV files into data quality checks, charts, plain-language insights, and downloadable PDF reports.",
-  url: process.env.NEXT_PUBLIC_SITE_URL || "https://reportdoctor.pk",
+    "ReportDoctor.pk turns spreadsheets into dashboards, diagnosis, insights, and client-ready PDF reports.",
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://reportdoctor-pk.vercel.app",
   contactEmail: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "hello@reportdoctor.pk"
 };
 
@@ -29,25 +29,25 @@ export const toolPages: ToolPage[] = [
   {
     slug: "data-analyzer",
     title: "Excel/CSV Data Analyzer",
-    metaTitle: "Excel/CSV Data Analyzer Online for Pakistan | ReportDoctor.pk",
+    metaTitle: "Excel/CSV Data Analyzer Online | ReportDoctor.pk",
     metaDescription:
-      "Upload Excel or CSV files and get summaries, missing values, duplicate checks, charts, business insights, and PDF report options.",
-    eyebrow: "Working analysis tool",
+      "Upload Excel or CSV files and get dashboards, data diagnosis, charts, insights, and PDF report options.",
+    eyebrow: "AI-style analysis tool",
     summary:
-      "Upload a spreadsheet and get an instant scan with column detection, missing values, duplicate rows, charts, and simple English plus Roman Urdu insights.",
+      "Upload a spreadsheet and get an instant scan with column detection, data diagnosis, smart dashboard recommendations, charts, and plain-language insights.",
     primaryAction: "Start Free Scan",
     useCases: ["Sales files", "Inventory sheets", "Survey results", "Expense records", "Customer lists"],
     features: [
       "CSV, XLSX, and XLS upload",
       "Automatic numeric, category, date, and text detection",
-      "Free scan with limited summary and two charts",
-      "Paid full PDF report workflow for manual Easypaisa and WhatsApp screenshot verification"
+      "Free scan with limited dashboard, diagnosis, and charts",
+      "Paid report credits unlock the full AI consultant report and PDF"
     ],
     faq: [
       {
         question: "Are uploaded files stored permanently?",
         answer:
-          "No. In the MVP backend files are processed in memory and are not stored permanently unless you choose to add storage later."
+          "No. Files are processed for analysis and the current backend is designed not to store raw uploads permanently."
       },
       {
         question: "Can beginners use this without knowing data analysis?",
@@ -66,11 +66,11 @@ export const toolPages: ToolPage[] = [
     metaTitle: "Sales Report Generator from Excel | ReportDoctor.pk",
     metaDescription:
       "Create sales summaries, top products, top customers, order values, trends, and profit estimates from Excel or CSV sales data.",
-    eyebrow: "For shops and online sellers",
+    eyebrow: "For sales teams and sellers",
     summary:
-      "Convert sales exports from Daraz, POS systems, or manual Excel sheets into understandable sales KPIs, charts, and recommendations.",
+      "Convert sales exports from ecommerce platforms, POS systems, or manual Excel sheets into understandable sales KPIs, charts, and recommendations.",
     primaryAction: "Analyze Sales File",
-    useCases: ["Mobile shops", "Daraz sellers", "Retail stores", "Wholesale ledgers"],
+    useCases: ["Retail stores", "Ecommerce sellers", "Service businesses", "Wholesale ledgers"],
     features: [
       "Total sales, order count, and average order value",
       "Top products and slow products",
@@ -83,7 +83,7 @@ export const toolPages: ToolPage[] = [
         answer: "A good sales file has date, order ID, product, customer, amount, quantity, and optional cost columns."
       },
       {
-        question: "Can it analyze Daraz seller exports?",
+        question: "Can it analyze ecommerce seller exports?",
         answer: "Yes, upload the export as CSV or Excel and map the relevant columns if names are different."
       }
     ]
@@ -235,13 +235,13 @@ export const sampleReports = [
   {
     slug: "mobile-shop-sales-report",
     title: "Mobile Shop Sales Report",
-    description: "A sample sales dashboard and PDF flow for a mobile accessories shop.",
+    description: "A sample sales dashboard and PDF flow for a retail product business.",
     pdf: "/sample-reports/mobile-shop-sales-report.pdf"
   },
   {
     slug: "daraz-seller-sales-report",
-    title: "Daraz Seller Sales Report",
-    description: "A seller-friendly example focused on revenue, top SKUs, returns, and slow products.",
+    title: "Ecommerce Seller Sales Report",
+    description: "An ecommerce seller example focused on revenue, top SKUs, returns, and slow products.",
     pdf: "/sample-reports/daraz-seller-sales-report.pdf"
   },
   {
@@ -253,7 +253,7 @@ export const sampleReports = [
   {
     slug: "clinic-patient-report",
     title: "Clinic Patient Report",
-    description: "Patient visit and service trend report for a small clinic.",
+    description: "Service visit and operational trend report for a small clinic or service office.",
     pdf: "/sample-reports/clinic-patient-report.pdf"
   },
   {
@@ -297,21 +297,23 @@ export const pricingTiers = [
     id: "free-scan",
     name: "Free Scan",
     price: "Rs. 0",
+    note: "Free preview",
     amountPkr: 0,
     credits: 0,
-    description: "Quick data quality and summary preview for beginners.",
-    features: ["Upload CSV or Excel", "Dataset shape and columns", "Missing and duplicate checks", "2 charts", "Limited insights"],
+    description: "Quick data diagnosis and dashboard preview for any spreadsheet.",
+    features: ["Upload CSV or Excel", "Dataset shape and column profile", "Short Data Doctor Diagnosis", "Limited charts", "Short AI consultant summary"],
     action: "Start Free Scan",
     isPaid: false
   },
   {
     id: "basic-pdf",
-    name: "Basic PDF Report",
+    name: "Basic Report",
     price: "Rs. 300",
+    note: "Approx. USD checkout coming soon",
     amountPkr: 300,
     credits: 1,
-    description: "A clean PDF report for simple files and quick sharing.",
-    features: ["Full PDF download", "Data quality summary", "Missing and duplicate checks", "Basic charts", "Plain English insights"],
+    description: "A clean consultant-style PDF for simple files and quick sharing.",
+    features: ["1 full PDF report credit", "Full Data Doctor Diagnosis", "KPI summary", "Core charts", "Recommended actions"],
     action: "Select Basic",
     isPaid: true
   },
@@ -319,21 +321,23 @@ export const pricingTiers = [
     id: "business-report",
     name: "Business Report",
     price: "Rs. 700",
+    note: "Approx. USD checkout coming soon",
     amountPkr: 700,
     credits: 3,
-    description: "A deeper report for shops, sellers, academies, clinics, and NGOs.",
-    features: ["Business mode analysis", "English and Roman Urdu insights", "Recommendations", "More detailed charts", "WhatsApp verification"],
+    description: "A deeper reporting pack for teams that need dashboards, risks, and next steps.",
+    features: ["3 full report credits", "Full AI consultant report", "Full smart dashboard", "Business Health Score", "Action plan"],
     action: "Select Business",
     isPaid: true
   },
   {
     id: "pro-report",
-    name: "Pro Report",
+    name: "Pro Consultant Report",
     price: "Rs. 1,500",
+    note: "Approx. USD checkout coming soon",
     amountPkr: 1500,
     credits: 7,
-    description: "Best for important files that need a polished report and careful review.",
-    features: ["Full report package", "Priority manual verification", "PDF report workflow", "Template guidance", "Follow-up support on WhatsApp"],
+    description: "Best for recurring reports, client delivery, and priority manual review.",
+    features: ["7 full report credits", "Priority manual verification", "Consultant PDF workflow", "Template guidance", "Launch support"],
     action: "Select Pro",
     isPaid: true
   }
@@ -349,7 +353,7 @@ export const paymentOptions = {
   easypaisa: cleanPublicValue(process.env.NEXT_PUBLIC_EASYPAISA_NUMBER, ["03XX-XXXXXXX"]) || "03100906678",
   bank:
     cleanPublicValue(process.env.NEXT_PUBLIC_BANK_DETAILS, ["Bank name / account title / IBAN"]) ||
-    "Available on WhatsApp",
+    "Available through support",
   whatsapp: cleanPublicValue(process.env.NEXT_PUBLIC_WHATSAPP_NUMBER, ["923000000000"]) || "923100906678"
 };
 
@@ -361,7 +365,7 @@ export const blogPosts = [
     body: [
       "Online Excel analysis is useful when you need a quick report but do not want to build formulas from scratch. Start by checking that every column has a clear heading, dates are in one format, and amounts are numeric.",
       "After upload, review dataset shape, missing values, duplicate rows, and column types. These checks catch many common mistakes before charts are created.",
-      "For business users in Pakistan, a simple workflow works best: upload file, choose business mode, review suggestions, then download or request the full report."
+      "For business users, a simple workflow works best: upload file, choose business mode, review suggestions, then download or request the full report."
     ]
   },
   {
@@ -406,10 +410,10 @@ export const blogPosts = [
   },
   {
     slug: "how-daraz-sellers-can-analyze-sales-data",
-    title: "How Daraz Sellers Can Analyze Sales Data",
-    description: "Practical reporting ideas for Daraz sellers using CSV or Excel exports.",
+    title: "How Ecommerce Sellers Can Analyze Sales Data",
+    description: "Practical reporting ideas for ecommerce sellers using CSV or Excel exports.",
     body: [
-      "Daraz sellers can use exports to track top SKUs, cancelled orders, returned items, monthly revenue, and slow products. The key is to keep SKU, product, order date, quantity, and net amount columns clean.",
+      "Ecommerce sellers can use exports to track top SKUs, cancelled orders, returned items, monthly revenue, and slow products. The key is to keep SKU, product, order date, quantity, and net amount columns clean.",
       "Start with product-level sales. Then compare monthly trends and identify items that sell often but produce weak profit after cost and fees.",
       "Use the same template each month so trend reports become easier and more reliable."
     ]

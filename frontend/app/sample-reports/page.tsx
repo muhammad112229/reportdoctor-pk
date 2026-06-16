@@ -6,7 +6,7 @@ import { sampleReports } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Sample Reports",
   description:
-    "View sample PDF reports for mobile shops, Daraz sellers, tuition academies, clinics, and inventory analysis."
+    "View sample PDF reports for sales, ecommerce, service operations, education, and inventory analysis."
 };
 
 export default function SampleReportsPage() {
@@ -17,8 +17,8 @@ export default function SampleReportsPage() {
           <p className="eyebrow">Sample reports</p>
           <h1>See what a ReportDoctor.pk report looks like</h1>
           <p>
-            These starter examples show the structure: cover page, summary, data quality check, charts, insights,
-            recommendations, and disclaimer.
+            These starter examples show the structure: cover page, executive summary, data diagnosis, charts, insights,
+            recommendations, action plan, and disclaimer.
           </p>
         </div>
       </section>
@@ -45,4 +45,3 @@ export default function SampleReportsPage() {
     </>
   );
 }
-

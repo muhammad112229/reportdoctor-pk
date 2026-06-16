@@ -17,7 +17,7 @@ async function analyze(page, filePath, mode, expected) {
   await expect(page.getByText("Data Doctor Diagnosis", { exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Ask My Data", exact: true })).toBeVisible();
   await expect(page.getByText("Plain English")).toBeVisible();
-  await expect(page.getByText("Roman Urdu", { exact: true })).toBeVisible();
+  await expect(page.getByText("Simple guidance", { exact: true })).toBeVisible();
   await expect(page.locator(".js-plotly-plot").first()).toBeVisible({ timeout: 60000 });
   if (expected) {
     await expect(page.getByText(expected.missing, { exact: true }).first()).toBeVisible();
@@ -30,7 +30,7 @@ const context = await browser.newContext({ acceptDownloads: true, viewport: { wi
 const page = await context.newPage();
 
 await page.goto("http://127.0.0.1:3000", { waitUntil: "domcontentloaded" });
-await expect(page.getByRole("heading", { name: "Turn messy Excel files into premium consultant reports" })).toBeVisible();
+await expect(page.getByRole("heading", { name: "Turn spreadsheets into dashboards, diagnosis, insights, and client-ready PDF reports" })).toBeVisible();
 await page.waitForTimeout(1500);
 await page.goto("http://127.0.0.1:3000/free-scan", { waitUntil: "domcontentloaded" });
 await expect(page).toHaveURL(/\/free-scan$/);

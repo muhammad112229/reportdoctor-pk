@@ -25,7 +25,7 @@ export default function DataAnalyzerPage() {
             <span className="badge">XLSX</span>
             <span className="badge">XLS</span>
             <span className="badge">Beginner Mode</span>
-            <span className="badge">English + Roman Urdu</span>
+            <span className="badge">Plain-language insights</span>
           </div>
         </div>
       </section>
@@ -35,8 +35,8 @@ export default function DataAnalyzerPage() {
           <p className="eyebrow">Upload tool</p>
           <h2>Analyze your file</h2>
           <p className="section-intro">
-            Select a business mode, upload your spreadsheet, and review the free scan. For local setup, run the FastAPI
-            backend on port 8000 before using this form.
+            Select a business mode, upload your spreadsheet, and review the free scan with diagnosis, dashboard
+            recommendations, charts, and AI-style consultant notes.
           </p>
           <p className="muted">
             Sample files are available on the <Link href="/templates">Templates page</Link>.
@@ -60,4 +60,3 @@ export default function DataAnalyzerPage() {
     </>
   );
 }
-

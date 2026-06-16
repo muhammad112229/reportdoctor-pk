@@ -55,7 +55,7 @@ export default async function SampleReportPage({ params }: { params: Promise<{ s
           </p>
         </div>
         <div className="feature-list">
-          {["Dataset summary", "Data quality check", "Charts", "English insights", "Roman Urdu insights", "Recommendations"].map(
+          {["Dataset summary", "Data Doctor Diagnosis", "Charts", "Plain-language insights", "Recommended actions", "Disclaimer"].map(
             (item) => (
               <div className="feature-row" key={item}>
                 <span>{item}</span>

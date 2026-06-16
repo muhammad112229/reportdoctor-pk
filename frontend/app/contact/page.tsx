@@ -15,8 +15,8 @@ export default function ContactPage() {
           <p className="eyebrow">Contact</p>
           <h1>Send a file question or payment reference</h1>
           <p>
-            Use this placeholder form in the MVP, then connect it to your preferred backend, email service, or WhatsApp
-            workflow before launch.
+            Ask a question about a report, payment proof, spreadsheet structure, or template setup. Email support is
+            available now while additional checkout and support options are prepared.
           </p>
         </div>
       </section>
@@ -28,8 +28,8 @@ export default function ContactPage() {
               <input id="name" name="name" placeholder="Your name" />
             </div>
             <div className="field">
-              <label htmlFor="email">Email or WhatsApp</label>
-              <input id="email" name="email" placeholder="name@example.com or 03XX-XXXXXXX" />
+              <label htmlFor="email">Email or support contact</label>
+              <input id="email" name="email" placeholder="name@example.com" />
             </div>
             <div className="field">
               <label htmlFor="message">Message</label>
@@ -45,12 +45,11 @@ export default function ContactPage() {
           <p className="eyebrow">Support</p>
           <h2>What to include</h2>
           <p className="section-intro">
-            Mention your business mode, file type, expected report, and whether you already sent payment. Do not send highly
-            sensitive files until a proper storage and deletion policy is configured.
+            Mention your business mode, file type, expected report, and whether you already sent payment proof. Do not send
+            highly sensitive files unless you are comfortable with the current launch privacy policy.
           </p>
         </div>
       </section>
     </>
   );
 }
-

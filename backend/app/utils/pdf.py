@@ -152,7 +152,7 @@ def build_pdf_report(analysis: dict[str, Any]) -> bytes:
             story.append(Paragraph(f"- {item}", styles["BodyText"]))
         story.append(Spacer(1, 0.2 * inch))
 
-    add_section_title(story, styles, "Roman Urdu Summary")
+    add_section_title(story, styles, "Simple Guidance Summary")
     for insight in analysis["insights_roman_urdu"]:
         story.append(Paragraph(f"- {insight}", styles["BodyText"]))
     story.append(Spacer(1, 0.18 * inch))

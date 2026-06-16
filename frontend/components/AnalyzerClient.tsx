@@ -154,6 +154,7 @@ const modes = [
 
 const MAX_UPLOAD_MB = 10;
 const MAX_UPLOAD_BYTES = MAX_UPLOAD_MB * 1024 * 1024;
+const ALLOWED_UPLOAD_EXTENSIONS = [".csv", ".xlsx", ".xls"];
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "";
 
 export function AnalyzerClient() {
@@ -187,12 +188,13 @@ export function AnalyzerClient() {
       setError("Please choose a CSV or Excel file first.");
       return;
     }
-    if (!API_BASE) {
-      setError("The analysis service is not configured. Please set NEXT_PUBLIC_API_URL and try again.");
+    const fileError = validateSelectedFile(file);
+    if (fileError) {
+      setError(fileError);
       return;
     }
-    if (file.size > MAX_UPLOAD_BYTES) {
-      setError(`This file is too large. Please upload a file up to ${MAX_UPLOAD_MB} MB.`);
+    if (!API_BASE) {
+      setError("The analysis service is not configured. Please contact support or try again later.");
       return;
     }
 
@@ -230,12 +232,13 @@ export function AnalyzerClient() {
       setError("Please choose a file first.");
       return;
     }
-    if (!API_BASE) {
-      setError("The analysis service is not configured. Please set NEXT_PUBLIC_API_URL and try again.");
+    const fileError = validateSelectedFile(file);
+    if (fileError) {
+      setError(fileError);
       return;
     }
-    if (file.size > MAX_UPLOAD_BYTES) {
-      setError(`This file is too large. Please upload a file up to ${MAX_UPLOAD_MB} MB.`);
+    if (!API_BASE) {
+      setError("The PDF service is not configured. Please contact support or try again later.");
       return;
     }
     setError(null);
@@ -250,11 +253,11 @@ export function AnalyzerClient() {
     }
 
     if (!session && !unlockCode.trim()) {
-      setError("Please sign in and use an available report credit to download the full PDF.");
+      setError("Please sign in and use an available report credit to download the full consultant PDF.");
       return;
     }
     if (session && availableCredits <= 0 && !unlockCode.trim()) {
-      setError("No report credits available. Please buy a paid report plan first.");
+      setError("No report credits available. Start with a paid plan to unlock the full dashboard, AI consultant report, and PDF.");
       return;
     }
 
@@ -325,9 +328,9 @@ export function AnalyzerClient() {
               accept=".csv,.xlsx,.xls"
               onChange={(event) => setFile(event.target.files?.[0] || null)}
             />
-            <span className="muted">Choose a spreadsheet up to {MAX_UPLOAD_MB} MB. Files are processed in memory for this MVP.</span>
+            <span className="muted">Choose a spreadsheet up to {MAX_UPLOAD_MB} MB. Files are processed for analysis.</span>
             <span className="privacy-warning">
-              Please do not upload highly sensitive personal, banking, or confidential files.
+              Raw files are not sent to external AI by default. Avoid highly sensitive personal, banking, medical, or legal files unless you are comfortable.
             </span>
           </div>
 
@@ -374,7 +377,7 @@ export function AnalyzerClient() {
             </div>
           ) : (
             <div className="status-box">
-              Free Scan works without login. Sign in and buy credits to download full PDFs.
+              Free Scan works without login. Sign in and buy credits to unlock full consultant PDFs.
             </div>
           )}
 
@@ -703,8 +706,8 @@ export function AnalyzerClient() {
               </ul>
             </div>
             <div className="result-panel">
-              <p className="eyebrow">Roman Urdu</p>
-              <h2>Asaan zubaan</h2>
+              <p className="eyebrow">Simple guidance</p>
+              <h2>Plain-language notes</h2>
               <ul className="insight-list">
                 {result.insights_roman_urdu.map((item) => (
                   <li key={item}>{item}</li>
@@ -729,8 +732,8 @@ export function AnalyzerClient() {
                 <p className="eyebrow">Locked in free scan</p>
                 <h2 id="pdf-report">Unlock the full AI consultant PDF</h2>
                 <p className="section-intro">
-                  {result.feature_access.upgrade_message} Full PDF report chahiye? Pricing page se plan choose karein,
-                  Easypaisa payment karein, aur WhatsApp par screenshot bhejein.
+                  {result.feature_access.upgrade_message} Choose a paid plan to unlock the full dashboard, AI consultant
+                  report, action plan, and PDF. International checkout coming soon; manual local verification is available now.
                 </p>
                 <ul className="insight-list">
                   {result.locked_features.map((item) => (
@@ -772,6 +775,21 @@ function answerDataQuestion(result: AnalysisResult, question: string) {
     return normalized.includes(cleanKey) || cleanKey.includes(normalized);
   });
   return match?.[1] || result.ask_my_data.unsupported_message;
+}
+
+function validateSelectedFile(file: File) {
+  const lowerName = file.name.toLowerCase();
+  const hasAllowedExtension = ALLOWED_UPLOAD_EXTENSIONS.some((extension) => lowerName.endsWith(extension));
+  if (!hasAllowedExtension) {
+    return "Unsupported file type. Please upload a CSV, XLSX, or XLS spreadsheet.";
+  }
+  if (file.size > MAX_UPLOAD_BYTES) {
+    return `This file is too large. Please upload a spreadsheet up to ${MAX_UPLOAD_MB} MB.`;
+  }
+  if (file.size === 0) {
+    return "This file is empty. Please choose a spreadsheet with rows and columns.";
+  }
+  return null;
 }
 
 function UpgradeNotice({ message }: { message: string }) {
@@ -819,7 +837,19 @@ function formatClientError(caught: unknown, fallback: string) {
     return fallback;
   }
   if (caught instanceof Error) {
-    return caught.message;
+    if (/unsupported file type/i.test(caught.message)) {
+      return "Unsupported file type. Please upload a CSV, XLSX, or XLS spreadsheet.";
+    }
+    if (/too large/i.test(caught.message)) {
+      return `This file is too large. Please upload a spreadsheet up to ${MAX_UPLOAD_MB} MB.`;
+    }
+    if (/no report credits/i.test(caught.message)) {
+      return "No report credits available. Start with a paid plan to unlock the full consultant PDF.";
+    }
+    if (/could not analyze|corrupted|invalid|no readable rows|no usable rows/i.test(caught.message)) {
+      return `${caught.message} If the issue continues, export a fresh CSV or XLSX copy and try again.`;
+    }
+    return caught.message || fallback;
   }
   return fallback;
 }

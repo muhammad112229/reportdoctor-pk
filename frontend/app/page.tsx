@@ -4,7 +4,6 @@ import {
   ArrowRight,
   BookOpen,
   CreditCard,
-  Download,
   FileCheck2,
   FileSpreadsheet,
   GraduationCap,
@@ -24,22 +23,22 @@ const howItWorks = [
   {
     icon: FileSpreadsheet,
     title: "Upload Excel/CSV",
-    text: "Choose a CSV, XLSX, or XLS file from your shop, survey, sales, inventory, or finance workflow."
+    text: "Choose a CSV, XLSX, or XLS file from your sales, survey, inventory, finance, or operations workflow."
   },
   {
     icon: SearchCheck,
     title: "Get free scan",
-    text: "Review missing values, duplicate rows, detected columns, charts, English insights, and Roman Urdu guidance."
+    text: "Review data diagnosis, missing values, duplicate rows, detected columns, charts, and plain-language insights."
   },
   {
     icon: CreditCard,
     title: "Buy report credits",
-    text: "If the preview is useful, choose Basic, Business, or Pro and send payment through Easypaisa."
+    text: "If the preview is useful, choose Basic, Business, or Pro report credits. International checkout coming soon."
   },
   {
     icon: MessageCircle,
-    title: "Send screenshot on WhatsApp",
-    text: "Send the payment screenshot to WhatsApp so the report request can be verified manually."
+    title: "Use launch payment support",
+    text: "Manual Easypaisa and WhatsApp verification are available as temporary local support."
   },
   {
     icon: Sparkles,
@@ -49,11 +48,11 @@ const howItWorks = [
 ];
 
 const audiences = [
-  { icon: Store, title: "Shopkeepers", text: "Daily sales, inventory, and expenses in one quick scan." },
-  { icon: ShoppingBag, title: "Daraz sellers", text: "Understand orders, products, revenue, and slow movers." },
-  { icon: GraduationCap, title: "Academies", text: "Fee sheets, attendance exports, and student records." },
-  { icon: Stethoscope, title: "Clinics", text: "Patient visits, service trends, and operational summaries." },
-  { icon: BookOpen, title: "Students & researchers", text: "Survey results, missing values, and clean summaries." }
+  { icon: Store, title: "Retail teams", text: "Daily sales, inventory, and expenses in one quick scan." },
+  { icon: ShoppingBag, title: "Ecommerce sellers", text: "Understand orders, products, revenue, and slow movers." },
+  { icon: GraduationCap, title: "Education teams", text: "Fee sheets, attendance exports, and student records." },
+  { icon: Stethoscope, title: "Service clinics", text: "Visits, service trends, and operational summaries." },
+  { icon: BookOpen, title: "Researchers", text: "Survey results, missing values, and clean summaries." }
 ];
 
 const demoPreviews = [
@@ -84,15 +83,15 @@ export default function HomePage() {
     <>
       <section className="hero">
         <div className="hero-inner">
-          <p className="eyebrow">AI Data Consultant for Pakistani businesses</p>
-          <h1>Turn messy Excel files into premium consultant reports</h1>
+          <p className="eyebrow">AI Data Consultant for Excel and CSV Reports</p>
+          <h1>Turn spreadsheets into dashboards, diagnosis, insights, and client-ready PDF reports</h1>
           <p>
-            {site.tagline} Get Data Doctor Diagnosis, Business Health Score, smart dashboards, charts, and an Ask My
-            Data assistant before unlocking a polished consultant-grade PDF.
+            Upload Excel or CSV files and get Data Doctor Diagnosis, Business Health Score, smart dashboards, charts,
+            and an Ask My Data assistant before unlocking a polished consultant-grade PDF.
           </p>
           <div className="hero-actions">
             <Link className="button primary" href="/free-scan">
-              Generate Free Report
+              Start Free Scan
               <ArrowRight size={18} aria-hidden="true" />
             </Link>
             <Link className="button secondary" href="/sample-reports">
@@ -157,7 +156,7 @@ export default function HomePage() {
             {
               icon: FileSpreadsheet,
               title: "Upload Excel or CSV",
-              text: "Use files from shops, Daraz, Google Forms, clinics, academies, NGOs, or manual ledgers."
+              text: "Use files from ecommerce, sales, Google Forms, finance, inventory, operations, or manual ledgers."
             },
             {
               icon: Stethoscope,
@@ -282,7 +281,7 @@ export default function HomePage() {
         <div className="card-grid">
           <article className="tool-card">
             <h3>Sample reports</h3>
-            <p>{sampleReports.length} starter examples for sales, inventory, academy fees, clinics, and Daraz sellers.</p>
+            <p>{sampleReports.length} starter examples for sales, inventory, fees, service operations, and ecommerce sellers.</p>
             <div className="card-footer">
               <Link className="button secondary" href="/sample-reports">
                 View Samples
@@ -327,19 +326,19 @@ export default function HomePage() {
       <section className="section two-column">
         <div>
           <p className="eyebrow">Trust and privacy</p>
-          <h2>Built for practical MVP privacy</h2>
+          <h2>Privacy-first launch expectations</h2>
           <p className="section-intro">
-            Uploaded files are processed by the backend for analysis and are not designed to be stored permanently in the
-            MVP. Please do not upload highly sensitive personal, banking, medical, legal, or confidential files. Reports are
-            automatically generated and should be reviewed before business decisions.
+            Files are processed for analysis. Raw files are not sent to external AI by default, and AI-style insights are
+            generated from structured summaries and deterministic analysis. Avoid uploading highly sensitive personal data
+            unless you are comfortable doing so. Reports are analytical support, not financial or legal advice.
           </p>
         </div>
         <div className="feature-list">
           {[
             "No signup required for free scan",
             "Files are processed for analysis only",
-            "Do not upload highly sensitive personal or banking files",
-            "Reports should be reviewed before business decisions"
+            "Raw files are not sent to external AI by default",
+            "Reports are not financial or legal advice"
           ].map((item) => (
             <div className="feature-row" key={item}>
               <ShieldCheck size={18} aria-hidden="true" />

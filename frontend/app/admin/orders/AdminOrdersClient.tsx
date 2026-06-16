@@ -67,7 +67,7 @@ export function AdminOrdersClient() {
     try {
       await fetchJson(`/admin/orders/${orderId}/reject`, session, {
         method: "POST",
-        body: JSON.stringify({ admin_note: notes[orderId] || "Payment screenshot could not be verified." })
+        body: JSON.stringify({ admin_note: notes[orderId] || "Payment proof could not be verified." })
       });
       setStatus("Order rejected.");
       await loadOrders();
@@ -84,7 +84,7 @@ export function AdminOrdersClient() {
         <div>
           <p className="eyebrow">Admin orders</p>
           <h1>Pending payment requests</h1>
-          <p>Review Easypaisa payment screenshots sent on WhatsApp, then approve credits or reject with a note.</p>
+          <p>Review payment proof sent through launch support channels, then approve credits or reject with a note.</p>
         </div>
       </section>
       <section className="section portal-section">
@@ -149,7 +149,7 @@ export function AdminOrdersClient() {
                     <td colSpan={7}>
                       <div className="empty-state">
                         <strong>No pending payments</strong>
-                        <span>New paid plan requests will appear here after customers submit payment screenshots.</span>
+                        <span>New paid plan requests will appear here after customers submit payment proof.</span>
                       </div>
                     </td>
                   </tr>

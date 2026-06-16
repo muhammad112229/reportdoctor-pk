@@ -22,13 +22,13 @@ export const seoLandingPages: SeoLandingPage[] = [
   {
     slug: "excel-data-analyzer",
     title: "Excel Data Analyzer Online",
-    metaTitle: "Excel Data Analyzer Online for Pakistan | ReportDoctor.pk",
+    metaTitle: "Excel Data Analyzer Online | ReportDoctor.pk",
     metaDescription:
       "Upload Excel files and get a free scan with missing values, duplicate rows, charts, insights, and a paid PDF report option.",
     eyebrow: "Excel analysis",
     summary:
-      "Analyze Excel spreadsheets without building formulas from scratch. ReportDoctor.pk checks file quality, finds useful columns, creates charts, and explains the results in plain English and Roman Urdu.",
-    audience: "shop owners, Daraz sellers, academies, clinics, NGOs, students, and small teams",
+      "Analyze Excel spreadsheets without building formulas from scratch. ReportDoctor.pk checks file quality, recommends dashboards, creates charts, and explains the results in plain English.",
+    audience: "business owners, ecommerce sellers, operations teams, researchers, students, and analysts",
     primaryKeyword: "Excel data analyzer",
     fileExamples: ["monthly sales workbooks", "inventory sheets", "Google Sheets exports", "academy fee records"],
     columns: ["date", "amount", "product", "customer", "quantity", "cost", "stock", "city"],
@@ -47,7 +47,7 @@ export const seoLandingPages: SeoLandingPage[] = [
       },
       {
         question: "Does the free scan create a full PDF?",
-        answer: "The free scan shows a useful preview. A full PDF report is unlocked after manual Easypaisa payment and WhatsApp verification."
+        answer: "The free scan shows a useful preview. Paid report credits unlock the full PDF report; manual local payment support is available during launch."
       },
       {
         question: "Do I need to prepare formulas first?",
@@ -64,13 +64,13 @@ export const seoLandingPages: SeoLandingPage[] = [
     title: "CSV Report Generator",
     metaTitle: "CSV Report Generator with PDF Option | ReportDoctor.pk",
     metaDescription:
-      "Turn CSV files into data quality checks, charts, business insights, and downloadable PDF reports for Pakistani businesses.",
+      "Turn CSV files into data diagnosis, smart dashboards, business insights, and downloadable PDF reports.",
     eyebrow: "CSV reports",
     summary:
       "Upload a CSV export from a business tool, marketplace, form, or spreadsheet and turn it into an understandable report preview with charts, insights, and a full PDF unlock workflow.",
-    audience: "users who export reports from POS software, Daraz, Google Forms, accounting sheets, and custom systems",
+    audience: "users who export reports from POS software, ecommerce platforms, Google Forms, accounting sheets, and custom systems",
     primaryKeyword: "CSV report generator",
-    fileExamples: ["POS exports", "Daraz order CSV files", "survey response CSV files", "customer lists"],
+    fileExamples: ["POS exports", "ecommerce order CSV files", "survey response CSV files", "customer lists"],
     columns: ["order date", "order id", "item", "amount", "category", "rating", "stock", "response group"],
     checks: ["CSV headers", "blank rows", "duplicate records", "missing values", "numeric fields", "category counts"],
     outcomes: ["shareable summaries", "cleaner CSV files", "fewer manual formulas", "PDF report requests"],
@@ -107,10 +107,10 @@ export const seoLandingPages: SeoLandingPage[] = [
       "Create sales summaries from Excel or CSV files with revenue checks, top products, trends, missing values, and PDF reports.",
     eyebrow: "Sales reporting",
     summary:
-      "Convert shop, ecommerce, or Daraz sales files into a practical sales report with total sales, order counts, top products, trends, and data quality warnings.",
-    audience: "retail shops, mobile accessories sellers, Daraz sellers, wholesalers, academies, and service businesses",
+      "Convert retail, ecommerce, or service sales files into a practical sales report with total sales, order counts, top products, trends, and data quality warnings.",
+    audience: "retail teams, ecommerce sellers, wholesalers, academies, and service businesses",
     primaryKeyword: "sales report generator",
-    fileExamples: ["monthly sales ledgers", "Daraz seller exports", "shop order files", "service invoice sheets"],
+    fileExamples: ["monthly sales ledgers", "ecommerce seller exports", "retail order files", "service invoice sheets"],
     columns: ["date", "order id", "product", "customer", "quantity", "amount", "cost", "channel"],
     checks: ["total sales", "average order value", "top products", "duplicate orders", "missing amounts", "cost availability"],
     outcomes: ["clearer sales performance", "faster monthly review", "better stock decisions", "professional PDF reporting"],
@@ -130,7 +130,7 @@ export const seoLandingPages: SeoLandingPage[] = [
         answer: "Yes, if the file includes cost data. Without cost, the report focuses on revenue, counts, trends, and top categories."
       },
       {
-        question: "Can Daraz sellers use it?",
+        question: "Can ecommerce sellers use it?",
         answer: "Yes. Export orders as CSV or Excel, upload the file, and review the detected columns and sales summary."
       },
       {
@@ -148,9 +148,9 @@ export const seoLandingPages: SeoLandingPage[] = [
     eyebrow: "Inventory reporting",
     summary:
       "Turn a stock sheet into an inventory report that highlights low stock, stock value, reorder risks, slow-moving items, and data quality issues.",
-    audience: "shops, clinics, warehouses, ecommerce sellers, school stores, and small distributors",
+    audience: "retail teams, clinics, warehouses, ecommerce sellers, school stores, and small distributors",
     primaryKeyword: "inventory report generator",
-    fileExamples: ["stock ledgers", "SKU lists", "warehouse sheets", "shop inventory exports"],
+    fileExamples: ["stock ledgers", "SKU lists", "warehouse sheets", "retail inventory exports"],
     columns: ["sku", "item", "category", "current stock", "reorder level", "cost", "price", "sold quantity"],
     checks: ["low stock", "stock value", "slow movers", "missing SKU values", "duplicate items", "category summaries"],
     outcomes: ["better reorder planning", "clear stock risk lists", "less manual counting", "PDF inventory summaries"],
@@ -294,8 +294,8 @@ export const seoLandingPages: SeoLandingPage[] = [
         answer: "It gives useful summaries and insights, but final conclusions should be reviewed by the researcher or project owner."
       },
       {
-        question: "Can survey reports include Roman Urdu?",
-        answer: "Yes. The scan includes plain English and Roman Urdu-style guidance to make findings easier to understand."
+        question: "Can survey reports include simple language guidance?",
+        answer: "Yes. The scan includes plain-language guidance to make findings easier to understand."
       }
     ]
   },
@@ -308,9 +308,9 @@ export const seoLandingPages: SeoLandingPage[] = [
     eyebrow: "Profit analysis",
     summary:
       "Use sales and cost columns to estimate gross profit, review product performance, and understand whether revenue is turning into useful margin.",
-    audience: "small businesses, online sellers, shop owners, wholesalers, service providers, and finance helpers",
+    audience: "small businesses, online sellers, retail teams, wholesalers, service providers, and finance helpers",
     primaryKeyword: "profit loss calculator",
-    fileExamples: ["sales sheets with cost columns", "product ledgers", "monthly revenue files", "Daraz exports with item cost added"],
+    fileExamples: ["sales sheets with cost columns", "product ledgers", "monthly revenue files", "ecommerce exports with item cost added"],
     columns: ["date", "product", "quantity", "amount", "cost", "customer", "channel", "category"],
     checks: ["revenue", "cost availability", "gross profit estimate", "top products", "missing cost values", "duplicate sales rows"],
     outcomes: ["better margin visibility", "clearer pricing questions", "profit-focused reporting", "PDF report workflow"],

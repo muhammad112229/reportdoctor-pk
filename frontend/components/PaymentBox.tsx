@@ -14,10 +14,10 @@ export function PaymentBox() {
       <p className="eyebrow">Paid report MVP</p>
       <h2>Full PDF report option</h2>
       <p>
-        Full PDF report chahiye? Paid plan choose karein, Easypaisa payment karein, aur WhatsApp par screenshot bhejein.
+        Choose a paid report-credit plan to unlock the full dashboard, AI consultant report, action plan, and premium PDF.
       </p>
       <p className="muted">
-        Payment ke baad screenshot WhatsApp par bhejein. Admin approval ke baad report credit automatically activate ho jayega.
+        Manual Easypaisa and WhatsApp verification are temporary launch support options. International checkout coming soon.
       </p>
       <div className="feature-list">
         <div className="feature-row">
@@ -51,7 +51,7 @@ export function PaymentBox() {
         </a>
         <a className="button secondary" href={whatsappUrl} target="_blank" rel="noreferrer">
           <MessageCircle size={18} aria-hidden="true" />
-          Send Payment Screenshot
+          Send payment proof
         </a>
         <a className="button ghost" href={`mailto:${email}?subject=ReportDoctor.pk full report request`}>
           <Mail size={18} aria-hidden="true" />
@@ -59,11 +59,11 @@ export function PaymentBox() {
         </a>
       </div>
       <div className="field">
-        <label htmlFor="payment-proof">Payment screenshot placeholder</label>
+        <label htmlFor="payment-proof">Payment proof placeholder</label>
         <input id="payment-proof" type="file" accept="image/*,.pdf" />
       </div>
       <p className="muted">
-        <Upload size={16} aria-hidden="true" /> Screenshot bhejein, approval ka wait karein, phir credit se full PDF download karein.
+        <Upload size={16} aria-hidden="true" /> Send payment proof, wait for approval, then use your report credit to download the full PDF.
       </p>
     </section>
   );

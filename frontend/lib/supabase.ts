@@ -37,6 +37,10 @@ export function getSupabaseDiagnostics() {
 }
 
 export function logSafeSupabaseDiagnostics(context: string) {
+  if (process.env.NODE_ENV === "production") {
+    return;
+  }
+
   const diagnostics = getSupabaseDiagnostics();
   console.info(`[ReportDoctor auth] ${context}`, {
     supabaseUrlConfigured: diagnostics.urlConfigured,

@@ -2,9 +2,9 @@ import { BadgeCheck, Lock, Sparkles } from "lucide-react";
 
 export function TrustStrip() {
   const items = [
-    { icon: Lock, label: "Files processed in memory for MVP" },
+    { icon: Lock, label: "Files processed for analysis" },
     { icon: BadgeCheck, label: "No signup for free scan" },
-    { icon: Sparkles, label: "Beginner friendly guidance" }
+    { icon: Sparkles, label: "No external AI by default" }
   ];
 
   return (
@@ -18,4 +18,3 @@ export function TrustStrip() {
     </section>
   );
 }
-

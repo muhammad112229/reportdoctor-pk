@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "About ReportDoctor.pk, an MVP website and data-analysis app for Pakistani spreadsheet users and small businesses."
+    "About ReportDoctor.pk, an AI-style data consultant for Excel and CSV reports, dashboards, diagnosis, and PDF deliverables."
 };
 
 export default function AboutPage() {
@@ -12,10 +12,10 @@ export default function AboutPage() {
       <section className="page-hero compact-hero">
         <div>
           <p className="eyebrow">About</p>
-          <h1>Reports for people who do not live inside spreadsheets</h1>
+          <h1>AI-style reports for people who do not live inside spreadsheets</h1>
           <p>
-            ReportDoctor.pk is built for small business owners, sellers, shopkeepers, academies, clinics, NGOs, researchers,
-            and beginners who need practical reports without learning advanced data analysis first.
+            ReportDoctor.pk is built for business owners, sellers, teams, researchers, and beginners who need practical
+            reports without learning advanced data analysis first.
           </p>
         </div>
       </section>
@@ -24,8 +24,8 @@ export default function AboutPage() {
           <p className="eyebrow">Mission</p>
           <h2>Make everyday data easier to understand</h2>
           <p className="section-intro">
-            The product combines a search-friendly website with a working analysis backend. The MVP focuses on privacy,
-            clarity, low-cost deployment, and manual payment options that fit local workflows.
+            The product combines a search-friendly website with a working analysis backend. The launch focuses on privacy,
+            clarity, reliable deterministic analysis, and manual payment support while international checkout is prepared.
           </p>
         </div>
         <div className="feature-list">
@@ -41,4 +41,3 @@ export default function AboutPage() {
     </>
   );
 }
-

@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   manifest: "/site.webmanifest",
   title: {
-    default: `${site.name} | Excel/CSV Reports for Pakistani Businesses`,
+    default: `${site.name} | AI Data Consultant for Excel and CSV Reports`,
     template: `%s | ${site.name}`
   },
   description: site.description,
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: absoluteUrl(),
-    title: `${site.name} | Excel/CSV Reports for Pakistani Businesses`,
+    title: `${site.name} | AI Data Consultant for Excel and CSV Reports`,
     description: site.description,
     siteName: site.name,
     images: [
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${site.name} | Excel/CSV Reports for Pakistani Businesses`,
+    title: `${site.name} | AI Data Consultant for Excel and CSV Reports`,
     description: site.description,
     images: ["/branding/hero-cover.png"]
   }
